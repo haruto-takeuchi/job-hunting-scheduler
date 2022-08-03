@@ -5,6 +5,47 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <base target="_top" />
+    <style>
+      .no-display {
+        display: none;
+      }
+    </style>
   </head>
-  <body></body>
+  <body>
+    <?!= HtmlService.createHtmlOutputFromFile('src/pages/enterprise-list').getContent(); ?>
+    <?!= HtmlService.createHtmlOutputFromFile('src/pages/plan-list').getContent(); ?>
+    <?!= HtmlService.createHtmlOutputFromFile('src/pages/record-enterprise').getContent(); ?>
+    <?!= HtmlService.createHtmlOutputFromFile('src/pages/record-plan').getContent(); ?>
+  </body>
+  <script>
+    function onChangeScreen(screenName) {
+      const enterpriseList = document.getElementById("enterprise-list");
+      const planList = document.getElementById("plan-list");
+      const recordEnterprise = document.getElementById("record-enterprise");
+      const recordPlan = document.getElementById("record-plan");
+
+      if (screenName === "enterprise-list") {
+        enterpriseList.setAttribute("class", "");
+        planList.setAttribute("class", "no-display");
+        recordEnterprise.setAttribute("class", "no-display");
+        recordPlan.setAttribute("class", "no-display");
+      } else if (screenName === "plan-list") {
+        enterpriseList.setAttribute("class", "no-display");
+        planList.setAttribute("class", "");
+        recordEnterprise.setAttribute("class", "no-display");
+        recordPlan.setAttribute("class", "no-display");
+      } else if (screenName === "record-enterprise") {
+        enterpriseList.setAttribute("class", "no-display");
+        planList.setAttribute("class", "no-display");
+        recordEnterprise.setAttribute("class", "");
+        recordPlan.setAttribute("class", "no-display");
+      } else if (screenName === "record-plan") {
+        enterpriseList.setAttribute("class", "no-display");
+        planList.setAttribute("class", "no-display");
+        recordEnterprise.setAttribute("class", "no-display");
+        recordPlan.setAttribute("class", "");
+      }
+    }
+  </script>
 </html>
