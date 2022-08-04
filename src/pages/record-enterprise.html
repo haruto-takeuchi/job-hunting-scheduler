@@ -31,9 +31,13 @@
       const enterpriseName = document.getElementById("input-enterprise").value;
 
       if (!enterpriseName) {
-        alert("企業名がみ入力です");
+        alert("企業名が未入力です");
       } else {
-        google.script.run.createEnterpriseCalendar(enterpriseName);
+        google.script.run
+          .withSuccessHandler((data) => {
+            alert(data);
+          })
+          .createEnterpriseCalendar(enterpriseName);
       }
     }
   </script>
