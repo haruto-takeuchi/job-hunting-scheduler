@@ -1,9 +1,34 @@
 <body>
   <div id="enterprise-list">
-    <div>企業一覧</div>
-    <button onclick="onChangeScreen('record-enterprise')">企業追加</button>
-    <button onclick="onChangeScreen('record-enterprise')">編集</button>
-    <button onclick="onChangeScreen('plan-list')">すべての予定</button>
-    <button onclick="onChangeScreen('plan-list')">スケジュール</button>
+    <header class="title">企業一覧</header>
+    <div style="margin: 1%">
+      <button class="btn" onclick="onChangeScreen('record-enterprise')">
+        企業追加
+      </button>
+      <button class="btn" onclick="onChangeScreen('plan-list')">
+        すべての予定
+      </button>
+    </div>
+    <div style="margin: 2%">
+      ESM
+      <button class="btn" style="background-color: yellow;" onclick="onChangeScreen('plan-list')">
+        スケジュール
+      </button>
+      <button class="btn" style="background-color: green; color: white;" onclick="onChangeScreen('record-enterprise')">
+        編集
+      </button>
+      <button class="btn" style="background-color: red; color: white;">削除</button>
+    </div>
+    <div style="margin: 2%">
+      永和システム
+      <button class="btn" style="background-color: yellow;" onclick="onChangeScreen('plan-list')">
+        スケジュール
+      </button>
+      <button class="btn" style="background-color: green; color: white;" onclick="onChangeScreen('record-enterprise')">
+        編集
+      </button>
+      <button class="btn" style="background-color: red; color: white;">削除</button>
+    </div>
+    </div>
   </div>
 </body>
