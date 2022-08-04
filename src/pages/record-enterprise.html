@@ -35,7 +35,11 @@
       } else {
         google.script.run
           .withSuccessHandler((data) => {
-            alert(data);
+            alert(
+              data
+                ? "企業の登録が成功しました"
+                : "既に同名の企業が登録されています"
+            );
           })
           .createEnterpriseCalendar(enterpriseName);
       }

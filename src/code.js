@@ -5,6 +5,7 @@ function doGet() {
 /**
  * 企業カレンダー作成
  * @param {string} enterpriseName 企業名
+ * @returns カレンダーが作成されたらtrue、されなかったらfalse
  */
 function createEnterpriseCalendar(enterpriseName) {
   const sameNameCalendar = searchSameNameCalendar(enterpriseName);
@@ -16,10 +17,10 @@ function createEnterpriseCalendar(enterpriseName) {
   if (!sameNameCalendar) {
     const calendar = CalendarApp.createCalendar(enterpriseName);
     calendar.setDescription(JSON.stringify(description));
-    return "企業の登録が成功しました";
+    return true;
   }
 
-  return "既に同名の企業が登録されています";
+  return false;
 }
 
 /**
