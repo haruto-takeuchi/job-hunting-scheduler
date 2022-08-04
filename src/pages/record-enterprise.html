@@ -29,11 +29,8 @@
   <script>
     function createNewCalendar() {
       const enterpriseName = document.getElementById("input-enterprise").value;
-      google.script.run
-        .withSuccessHandler(() => {
-          alert("企業情報を登録しました");
-        })
-        .createEnterpriseCalendar(enterpriseName);
+
+      google.script.run.createEnterpriseCalendar(enterpriseName);
     }
   </script>
 </body>

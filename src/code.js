@@ -6,8 +6,13 @@ function doGet() {
  * 企業カレンダー作成
  * @param {string} enterpriseName 企業名
  */
-function createEnterpriseCalendar(enterpriseName) {
-  CalendarApp.createCalendar(enterpriseName, {
-    summary: { createdBy: "就活スケジュール管理", aspiration: "middle" },
-  });
+async function createEnterpriseCalendar(enterpriseName) {
+  // const calendars = CalendarApp.getAllCalendars();
+
+  const description = {
+    createdBy: "就活スケジュール管理",
+    aspiration: "middle",
+  };
+  const calendar = CalendarApp.createCalendar(enterpriseName);
+  calendar.setDescription(JSON.stringify(description));
 }
