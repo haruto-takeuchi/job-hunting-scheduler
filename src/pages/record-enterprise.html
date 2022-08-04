@@ -30,7 +30,11 @@
     function createNewCalendar() {
       const enterpriseName = document.getElementById("input-enterprise").value;
 
-      google.script.run.createEnterpriseCalendar(enterpriseName);
+      if (!enterpriseName) {
+        alert("企業名がみ入力です");
+      } else {
+        google.script.run.createEnterpriseCalendar(enterpriseName);
+      }
     }
   </script>
 </body>

@@ -7,8 +7,6 @@ function doGet() {
  * @param {string} enterpriseName 企業名
  */
 async function createEnterpriseCalendar(enterpriseName) {
-  // const calendars = CalendarApp.getAllCalendars();
-
   const description = {
     createdBy: "就活スケジュール管理",
     aspiration: "middle",
