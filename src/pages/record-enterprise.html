@@ -11,7 +11,7 @@
     </div>
     <div>
       <button
-        onclick="createCalendar()"
+        onclick="createNewCalendar()"
         style="font-weight: bold; padding: 0.5% 1%; margin: 1%"
       >
         登録
@@ -26,4 +26,14 @@
       </button>
     </div>
   </div>
+  <script>
+    function createNewCalendar() {
+      const enterpriseName = document.getElementById("input-enterprise").value;
+      google.script.run
+        .withSuccessHandler(() => {
+          console.log("OK");
+        })
+        .createEnterpriseCalendar(enterpriseName);
+    }
+  </script>
 </body>
