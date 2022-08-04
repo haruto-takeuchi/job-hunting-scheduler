@@ -1,6 +1,29 @@
 <body>
   <div id="record-enterprise" class="no-display">
-    <div>企業情報の登録</div>
-    <button onclick="onChangeScreen('enterprise-list')">企業一覧</button>
+    <header class="title">企業情報の登録</header>
+    <div style="margin: 1% 1% 5% 1%; font-size: 120%">
+      企業名
+      <input
+        type="text"
+        id="input-enterprise"
+        placeholder="企業名を入力してください"
+      />
+    </div>
+    <div>
+      <button
+        onclick="createCalendar()"
+        style="font-weight: bold; padding: 0.5% 1%; margin: 1%"
+      >
+        登録
+      </button>
+    </div>
+    <div>
+      <button
+        onclick="onChangeScreen('enterprise-list')"
+        style="font-weight: bold; padding: 0.5% 1%; margin: 1%"
+      >
+        企業一覧
+      </button>
+    </div>
   </div>
 </body>
