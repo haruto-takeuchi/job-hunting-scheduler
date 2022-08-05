@@ -1,9 +1,61 @@
 <body>
   <div id="enterprise-list">
-    <div>企業一覧</div>
-    <button onclick="onChangeScreen('record-enterprise')">企業追加</button>
-    <button onclick="onChangeScreen('record-enterprise')">編集</button>
-    <button onclick="onChangeScreen('plan-list')">すべての予定</button>
-    <button onclick="onChangeScreen('plan-list')">スケジュール</button>
+    <header class="title">企業一覧</header>
+    <div style="margin: 1%">
+      <button class="btn" onclick="onChangeScreen('record-enterprise')">
+        企業追加
+      </button>
+      <button class="btn" onclick="onChangeScreen('plan-list')">
+        すべての予定
+      </button>
+    </div>
+    <div id="show-enterprises"></div>
   </div>
+
+  <script>
+    function showEnterpriseList() {
+      const btnInfo = [
+        {
+          text: "スケジュール",
+          style: "background-color: yellow",
+          function: "onChangeScreen('plan-list')",
+        },
+        {
+          text: "編集",
+          style: "background-color: green; color: white",
+          function: "onChangeScreen('record-enterprise')",
+        },
+        {
+          text: "削除",
+          style: "background-color: red; color: white",
+          function: "",
+        },
+      ];
+
+      const enterpriseList = document.getElementById("show-enterprises");
+      enterpriseList.innerHTML = ""; // 初期化
+      google.script.run
+        .withSuccessHandler((enterpriseNameList) => {
+          enterpriseNameList.map((enterpriseName) => {
+            const enterpriseElement = document.createElement("div");
+            enterpriseElement.setAttribute("style", "margin: 2%");
+            enterpriseElement.innerHTML = enterpriseName;
+
+            // スケジュール、編集、削除ボタンを作成
+            btnInfo.map((btnInfo) => {
+              const scheduleBtn = document.createElement("button");
+              scheduleBtn.innerText = btnInfo.text;
+              scheduleBtn.setAttribute("class", "btn");
+              scheduleBtn.setAttribute("style", btnInfo.style);
+              scheduleBtn.setAttribute("onClick", btnInfo.function);
+              enterpriseElement.appendChild(scheduleBtn);
+            });
+
+            enterpriseList.appendChild(enterpriseElement);
+          });
+        })
+        .getEnterpriseNameList();
+    }
+    showEnterpriseList();
+  </script>
 </body>

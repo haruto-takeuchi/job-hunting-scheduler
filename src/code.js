@@ -76,3 +76,18 @@ function searchSameNameCalendar(enterpriseName) {
 
   return sameNameCalendar;
 }
+
+/**
+ * 企業カレンダーから名前を取得
+ * @returns 企業名を配列で返す
+ */
+function getEnterpriseNameList() {
+  const calendars = getEnterpriseCalendars();
+  const calendarNameList = [];
+
+  calendars.map((calendar) => {
+    calendarNameList.push(calendar.getName());
+  });
+
+  return calendarNameList;
+}
