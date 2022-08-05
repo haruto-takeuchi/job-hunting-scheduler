@@ -19,7 +19,7 @@
     </div>
     <div>
       <button
-        onclick="onChangeScreen('enterprise-list')"
+        onclick="toEnterpriseList()"
         style="font-weight: bold; padding: 0.5% 1%; margin: 1%"
       >
         企業一覧
@@ -43,6 +43,11 @@
           })
           .createEnterpriseCalendar(enterpriseName);
       }
+    }
+
+    function toEnterpriseList() {
+      onChangeScreen("enterprise-list");
+      showEnterpriseList();
     }
   </script>
 </body>
