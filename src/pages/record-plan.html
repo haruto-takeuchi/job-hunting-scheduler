@@ -1,6 +1,66 @@
 <body>
   <div id="record-plan" class="no-display">
-    <div>予定の登録</div>
-    <button onclick="onChangeScreen('plan-list')">予定一覧</button>
+    <header class="title">予定の登録</header>
+    <div>
+      <div class="plan-form">
+        <label>タイトル</label>
+        <input
+          id="plan-title"
+          type="text"
+          placeholder="予定のタイトルを入力してください"
+          style="width: 30%; padding: 0.5%"
+        />
+        <label style="color: red">*必須</label>
+      </div>
+      <div class="plan-form">
+        <label>日付</label>
+        <input id="plan-date" type="date" style="width: 10%; padding: 0.5%" />
+        <label style="color: red">*必須</label>
+      </div>
+      <div class="plan-form">
+        <label>開始時間</label>
+        <input
+          id="plan-start-time"
+          type="time"
+          style="width: 10%; padding: 0.5%"
+        />
+        <label style="color: red">*必須</label>
+      </div>
+      <div class="plan-form">
+        <label>終了時間</label>
+        <input
+          id="plan-end-time"
+          type="time"
+          style="width: 10%; padding: 0.5%"
+        />
+        <label style="color: red">*必須</label>
+      </div>
+      <div class="plan-form">
+        <label>場所</label>
+        <input id="plan-location" style="width: 30%; padding: 0.5%" />
+      </div>
+      <div class="plan-form">
+        <label style="position: _top">メモ</label>
+        <textarea
+          id="plan-memo"
+          style="
+            width: 30%;
+            height: 100px;
+            padding: 0.5%;
+            vertical-align: text-top;
+          "
+        ></textarea>
+      </div>
+    </div>
+    <button onclick="submitPlan()" class="btn">登録</button>
+    <br />
+    <button onclick="onChangeScreen('plan-list')" class="btn">予定一覧</button>
   </div>
+
+  <script>
+    function submitPlan() {
+      const planTitle = document.getElementById("plan-title").value;
+      console.log(planTitle);
+    }
+  </script>
 </body>
