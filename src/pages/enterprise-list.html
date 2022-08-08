@@ -13,48 +13,58 @@
   </div>
 
   <script>
+    function btnClick(transisionPage, calendarId) {
+      console.log(calendarId);
+      onChangeScreen(transisionPage);
+    }
+
     function showEnterpriseList() {
       const btnInfo = [
         {
           text: "スケジュール",
           style: "background-color: yellow",
-          function: "onChangeScreen('plan-list')",
+          page: "plan-list",
         },
         {
           text: "編集",
           style: "background-color: green; color: white",
-          function: "onChangeScreen('record-enterprise')",
+          page: "record-enterprise",
         },
         {
           text: "削除",
           style: "background-color: red; color: white",
-          function: "",
+          page: "",
         },
       ];
 
       const enterpriseList = document.getElementById("show-enterprises");
       enterpriseList.innerHTML = ""; // 初期化
       google.script.run
-        .withSuccessHandler((enterpriseNameList) => {
-          enterpriseNameList.map((enterpriseName) => {
+        .withSuccessHandler((calendarList) => {
+          calendarList.map((calendar) => {
             const enterpriseElement = document.createElement("div");
             enterpriseElement.setAttribute("style", "margin: 2%");
-            enterpriseElement.innerHTML = enterpriseName;
+            enterpriseElement.innerHTML = calendar.name;
 
             // スケジュール、編集、削除ボタンを作成
             btnInfo.map((btnInfo) => {
+              // console.log(calendar.id);
               const scheduleBtn = document.createElement("button");
               scheduleBtn.innerText = btnInfo.text;
               scheduleBtn.setAttribute("class", "btn");
               scheduleBtn.setAttribute("style", btnInfo.style);
-              scheduleBtn.setAttribute("onClick", btnInfo.function);
+              scheduleBtn.setAttribute(
+                "onClick",
+                btnClick(btnInfo.page, calendar.id)
+              );
               enterpriseElement.appendChild(scheduleBtn);
             });
 
             enterpriseList.appendChild(enterpriseElement);
           });
         })
-        .getEnterpriseNameList();
+        .getCalendarNameAndIdList();
+      // .getEnterpriseNameList();
     }
     showEnterpriseList();
   </script>

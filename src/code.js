@@ -111,3 +111,14 @@ function createEnterpriseEvent(calendarId, planInfo) {
   planInfo.location && event.setLocation(planInfo.location);
   planInfo.memo && event.setDescription(planInfo.memo);
 }
+
+function getCalendarNameAndIdList() {
+  const calendars = getEnterpriseCalendars();
+  const calendarList = [];
+
+  calendars.map((calendar) => {
+    calendarList.push({ name: calendar.getName(), id: calendar.getId() });
+  });
+
+  return calendarList;
+}
