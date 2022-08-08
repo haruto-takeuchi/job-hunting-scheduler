@@ -59,8 +59,47 @@
 
   <script>
     function submitPlan() {
-      const planTitle = document.getElementById("plan-title").value;
-      console.log(planTitle);
+      // ToDo:引数でCalendarIDを渡してそのカレンダーに予定を追加したい
+      const planInfo = {
+        title: document.getElementById("plan-title").value,
+        date: document.getElementById("plan-date").value,
+        startTime: document.getElementById("plan-start-time").value,
+        endTime: document.getElementById("plan-end-time").value,
+        location: document.getElementById("plan-location").value,
+        memo: document.getElementById("plan-memo").value,
+      };
+
+      if (
+        !planInfo.title ||
+        !planInfo.date ||
+        !planInfo.startTime ||
+        !planInfo.endTime
+      ) {
+        alert("未入力の欄があります");
+        return;
+      } else if (planInfo.startTime >= planInfo.endTime) {
+        alert("開始時間より終了時間が遅くなっています");
+        return;
+      }
+
+      // Todo:searchSameNameCalendarは今後sessionStorageからIDを取得するため削除予定
+      google.script.run
+        .withSuccessHandler((calendarId) => {
+          console.log(calendarId);
+          google.script.run
+            .withSuccessHandler(() => {
+              alert("予定の登録が完了しました");
+            })
+            .createEnterpriseEvent(calendarId, planInfo);
+        })
+        .searchSameNameCalendar("ESM");
+
+      console.log(planInfo.title);
+      console.log(planInfo.date);
+      console.log(planInfo.startTime);
+      console.log(planInfo.endTime);
+      console.log(planInfo.location);
+      console.log(planInfo.memo);
     }
   </script>
 </body>
