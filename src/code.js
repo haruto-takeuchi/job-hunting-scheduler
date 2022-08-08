@@ -65,7 +65,7 @@ function judgeEnterpriseCalendar(calendar) {
 /**
  * 同名のカレンダーを取得し返す
  * @param {string} enterpriseName
- * @returns 同名のカレンダー（ない場合はundefined）
+ * @returns 同名のカレンダーのID（ない場合はundefined）
  */
 function searchSameNameCalendar(enterpriseName) {
   const enterpriseCalendars = getEnterpriseCalendars();
@@ -74,7 +74,7 @@ function searchSameNameCalendar(enterpriseName) {
     return calendar.getName() == enterpriseName;
   });
 
-  return sameNameCalendar;
+  return sameNameCalendar.getId();
 }
 
 /**
@@ -90,4 +90,24 @@ function getEnterpriseNameList() {
   });
 
   return calendarNameList;
+}
+
+/**
+ * 任意の企業カレンダーに予定を作成
+ * @param {*} calendarId 企業カレンダーのID
+ * @param {*} planInfo 予定の情報
+ */
+function createEnterpriseEvent(calendarId, planInfo) {
+  const calendar = CalendarApp.getCalendarById(calendarId);
+  console.log(calendar);
+  console.log(typeof planInfo.date);
+  console.log(new Date(`${planInfo.date}, ${planInfo.startTime}`));
+  const event = calendar.createEvent(
+    planInfo.title,
+    new Date(`${planInfo.date}, ${planInfo.startTime}`),
+    new Date(`${planInfo.date}, ${planInfo.endTime}`)
+  );
+
+  planInfo.location && event.setLocation(planInfo.location);
+  planInfo.memo && event.setDescription(planInfo.memo);
 }
