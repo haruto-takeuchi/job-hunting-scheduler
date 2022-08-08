@@ -83,6 +83,7 @@
       }
 
       // Todo:searchSameNameCalendarは今後sessionStorageからIDを取得するため削除予定
+      const companyName = "ESM";
       google.script.run
         .withSuccessHandler((calendarId) => {
           console.log(calendarId);
@@ -92,7 +93,7 @@
             })
             .createEnterpriseEvent(calendarId, planInfo);
         })
-        .searchSameNameCalendar("ESM");
+        .searchSameNameCalendar(companyName);
 
       console.log(planInfo.title);
       console.log(planInfo.date);
