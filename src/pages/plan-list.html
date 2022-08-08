@@ -1,8 +1,66 @@
 <body>
   <div id="plan-list" class="no-display">
-    <div>予定一覧</div>
-    <button onclick="toEnterpriseList()">企業一覧</button>
-    <button onclick="onChangeScreen('record-plan')">予定作成</button>
-    <button onclick="onChangeScreen('record-plan')">編集</button>
+    <header class="title">予定一覧</header>
+
+    <div id="enterprise-name" style="text-align: center">ESM</div>
+    <button class="btn" onclick="toEnterpriseList()">企業一覧</button>
+    <button class="btn" onclick="onChangeScreen('record-plan')">
+      予定作成
+    </button>
+
+    <div
+      style="
+        background-color: rgb(180, 180, 180);
+        border-radius: 5px;
+        padding: 1%;
+        margin: 1%;
+      "
+    >
+      <div>タイトル :</div>
+      <div>日付 :</div>
+      <div>開始時刻 :</div>
+      <div>終了時刻 :</div>
+      <div>場所 :</div>
+      <div>メモ :</div>
+      <div style="text-align: right">
+        <button
+          class="btn"
+          style="background-color: green; color: white"
+          onclick="onChangeScreen('record-plan')"
+        >
+          編集
+        </button>
+        <button class="btn" style="background-color: red; color: white">
+          削除
+        </button>
+      </div>
+    </div>
+    <div
+      style="
+        background-color: orange;
+        border-radius: 5px;
+        padding: 1%;
+        margin: 1%;
+      "
+    >
+      <div>タイトル :</div>
+      <div>日付 :</div>
+      <div>開始時刻 :</div>
+      <div>終了時刻 :</div>
+      <div>場所 :</div>
+      <div>メモ :</div>
+      <div style="text-align: right">
+        <button
+          class="btn"
+          style="background-color: green; color: white"
+          onclick="onChangeScreen('record-plan')"
+        >
+          編集
+        </button>
+        <button class="btn" style="background-color: red; color: white">
+          削除
+        </button>
+      </div>
+    </div>
   </div>
 </body>

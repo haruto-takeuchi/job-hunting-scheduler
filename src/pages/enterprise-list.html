@@ -13,11 +13,6 @@
   </div>
 
   <script>
-    function btnClick(transisionPage, calendarId) {
-      console.log(calendarId);
-      onChangeScreen(transisionPage);
-    }
-
     function showEnterpriseList() {
       const btnInfo = [
         {
@@ -48,14 +43,13 @@
 
             // スケジュール、編集、削除ボタンを作成
             btnInfo.map((btnInfo) => {
-              // console.log(calendar.id);
               const scheduleBtn = document.createElement("button");
               scheduleBtn.innerText = btnInfo.text;
               scheduleBtn.setAttribute("class", "btn");
               scheduleBtn.setAttribute("style", btnInfo.style);
               scheduleBtn.setAttribute(
                 "onClick",
-                btnClick(btnInfo.page, calendar.id)
+                `clickBtn("${btnInfo.page}", "${calendar.id}")`
               );
               enterpriseElement.appendChild(scheduleBtn);
             });
@@ -64,8 +58,12 @@
           });
         })
         .getCalendarNameAndIdList();
-      // .getEnterpriseNameList();
     }
     showEnterpriseList();
+
+    function clickBtn(transisionPage, calendarId) {
+      sessionStorage.setItem("calendarId", calendarId);
+      onChangeScreen(transisionPage);
+    }
   </script>
 </body>
