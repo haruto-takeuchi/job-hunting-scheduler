@@ -2,65 +2,102 @@
   <div id="plan-list" class="no-display">
     <header class="title">予定一覧</header>
 
-    <div id="enterprise-name" style="text-align: center">ESM</div>
+    <div id="enterprise-name" style="text-align: center"></div>
     <button class="btn" onclick="toEnterpriseList()">企業一覧</button>
     <button class="btn" onclick="onChangeScreen('record-plan')">
       予定作成
     </button>
-
-    <div
-      style="
-        background-color: rgb(180, 180, 180);
-        border-radius: 5px;
-        padding: 1%;
-        margin: 1%;
-      "
-    >
-      <div>タイトル :</div>
-      <div>日付 :</div>
-      <div>開始時刻 :</div>
-      <div>終了時刻 :</div>
-      <div>場所 :</div>
-      <div>メモ :</div>
-      <div style="text-align: right">
-        <button
-          class="btn"
-          style="background-color: green; color: white"
-          onclick="onChangeScreen('record-plan')"
-        >
-          編集
-        </button>
-        <button class="btn" style="background-color: red; color: white">
-          削除
-        </button>
-      </div>
-    </div>
-    <div
-      style="
-        background-color: orange;
-        border-radius: 5px;
-        padding: 1%;
-        margin: 1%;
-      "
-    >
-      <div>タイトル :</div>
-      <div>日付 :</div>
-      <div>開始時刻 :</div>
-      <div>終了時刻 :</div>
-      <div>場所 :</div>
-      <div>メモ :</div>
-      <div style="text-align: right">
-        <button
-          class="btn"
-          style="background-color: green; color: white"
-          onclick="onChangeScreen('record-plan')"
-        >
-          編集
-        </button>
-        <button class="btn" style="background-color: red; color: white">
-          削除
-        </button>
-      </div>
-    </div>
+    <div id="show-plans"></div>
   </div>
+
+  <script>
+    function showPlanList() {
+      const calendarId = sessionStorage.getItem("calendarId");
+      const enterpriseName = document.getElementById("enterprise-name");
+      const planList = document.getElementById("show-plans");
+      planList.innerHTML = ""; // 初期化
+
+      google.script.run
+        .withSuccessHandler((calendarName) => {
+          enterpriseName.innerText = calendarName;
+        })
+        .getSameCalendar(calendarId);
+
+      google.script.run
+        .withSuccessHandler((eventList) => {
+          eventList.map((event) => {
+            const planElement = document.createElement("div");
+            if (judgeWeekAgo(event.date)) {
+              planElement.setAttribute("class", "less-week-plan");
+              console.log("less a week");
+            } else {
+              planElement.setAttribute("class", "more-week-plan");
+              console.log("more a week");
+            }
+            const planTitle = document.createElement("div");
+            const planDate = document.createElement("div");
+            const planStart = document.createElement("div");
+            const planEnd = document.createElement("div");
+            const planLocation = document.createElement("div");
+            const planMemo = document.createElement("div");
+            const btnRow = document.createElement("div");
+            const editBtn = document.createElement("button");
+            const deleteBtn = document.createElement("button");
+
+            planTitle.innerText = `タイトル : ${event.title}`;
+            planDate.innerText = `日付 : ${event.date}`;
+            planStart.innerText = `開始時間 : ${event.startTime}`;
+            planEnd.innerText = `終了時間 : ${event.endTime}`;
+            planLocation.innerText = `場所 : ${event.location}`;
+            planMemo.innerText = `メモ : ${event.memo}`;
+
+            btnRow.setAttribute("style", "text-align: right");
+            editBtn.innerText = "編集";
+            editBtn.setAttribute("class", "btn");
+            editBtn.setAttribute(
+              "style",
+              "background-color: green; color: white"
+            );
+            editBtn.setAttribute("onclick", "onChangeScreen('record-plan')");
+            deleteBtn.innerText = "削除";
+            deleteBtn.setAttribute("class", "btn");
+            deleteBtn.setAttribute(
+              "style",
+              "background-color: red; color: white"
+            );
+
+            planElement.appendChild(planTitle);
+            planElement.appendChild(planDate);
+            planElement.appendChild(planStart);
+            planElement.appendChild(planEnd);
+            planElement.appendChild(planLocation);
+            planElement.appendChild(planMemo);
+            planElement.appendChild(editBtn);
+            planElement.appendChild(deleteBtn);
+
+            btnRow.appendChild(editBtn);
+            btnRow.appendChild(deleteBtn);
+            planElement.appendChild(btnRow);
+
+            planList.appendChild(planElement);
+          });
+        })
+        .getEventList(calendarId);
+    }
+
+    /**
+     * 予定まで１週間切っているか判定
+     * return １週間切っていたらtrue
+     */
+    function judgeWeekAgo(date) {
+      console.log(`date:${date}`);
+      const today = new Date();
+      const eventDay = new Date(date);
+      eventDay.setDate(eventDay.getDate() - 7);
+      console.log(`eventday:${eventDay}`);
+
+      today >= eventDay ? console.log(true) : console.log(false);
+      return today >= eventDay;
+    }
+  </script>
 </body>

@@ -63,6 +63,7 @@
 
     function clickBtn(transisionPage, calendarId) {
       sessionStorage.setItem("calendarId", calendarId);
+      showPlanList(); // スケジュールボタンにだけ実装したい
       onChangeScreen(transisionPage);
     }
   </script>
