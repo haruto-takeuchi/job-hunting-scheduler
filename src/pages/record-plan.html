@@ -59,7 +59,8 @@
 
   <script>
     function submitPlan() {
-      // ToDo:引数でCalendarIDを渡してそのカレンダーに予定を追加したい
+      const calendarId = sessionStorage.getItem("calendarId");
+      // ToDo:入力フォームを初期化したい
       const planInfo = {
         title: document.getElementById("plan-title").value,
         date: document.getElementById("plan-date").value,
@@ -82,25 +83,11 @@
         return;
       }
 
-      // Todo:searchSameNameCalendarは今後sessionStorageからIDを取得するため削除予定
-      const companyName = "ESM";
       google.script.run
-        .withSuccessHandler((calendarId) => {
-          console.log(calendarId);
-          google.script.run
-            .withSuccessHandler(() => {
-              alert("予定の登録が完了しました");
-            })
-            .createEnterpriseEvent(calendarId, planInfo);
+        .withSuccessHandler(() => {
+          alert("予定の登録が完了しました");
         })
-        .searchSameNameCalendar(companyName);
-
-      console.log(planInfo.title);
-      console.log(planInfo.date);
-      console.log(planInfo.startTime);
-      console.log(planInfo.endTime);
-      console.log(planInfo.location);
-      console.log(planInfo.memo);
+        .createEnterpriseEvent(calendarId, planInfo);
     }
   </script>
 </body>
