@@ -29,10 +29,8 @@
             const planElement = document.createElement("div");
             if (judgeWeekAgo(event.date)) {
               planElement.setAttribute("class", "less-week-plan");
-              console.log("less a week");
             } else {
               planElement.setAttribute("class", "more-week-plan");
-              console.log("more a week");
             }
             const planTitle = document.createElement("div");
             const planDate = document.createElement("div");
@@ -90,13 +88,10 @@
      * return １週間切っていたらtrue
      */
     function judgeWeekAgo(date) {
-      console.log(`date:${date}`);
       const today = new Date();
       const eventDay = new Date(date);
       eventDay.setDate(eventDay.getDate() - 7);
-      console.log(`eventday:${eventDay}`);
 
-      today >= eventDay ? console.log(true) : console.log(false);
       return today >= eventDay;
     }
   </script>

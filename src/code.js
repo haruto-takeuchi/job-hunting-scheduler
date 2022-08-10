@@ -158,9 +158,6 @@ function formatDateToString(date, format) {
   day = ("0" + day).slice(-2);
   hour = ("0" + hour).slice(-2);
   minute = ("0" + minute).slice(-2);
-  // console.log(`year:${year}`);
-  console.log(`month:${date.getMonth()}`);
-  // console.log(`day:${day}`);
 
   switch (format) {
     case "YYYY-MM-DD":
@@ -174,6 +171,11 @@ function formatDateToString(date, format) {
   }
 }
 
+/**
+ * 任意のカレンダーからイベント情報を取得して返す
+ * @param {string} calendarId
+ * @returns イベント情報の配列
+ */
 function getEventList(calendarId) {
   const events = getEnterpriseEvents(calendarId);
   const eventsInfo = [];
@@ -193,6 +195,11 @@ function getEventList(calendarId) {
   return eventsInfo;
 }
 
+/**
+ * カレンダーIDからカレンダー名を返す
+ * @param {string} calendarId
+ * @returns カレンダー名
+ */
 function getSameCalendar(calendarId) {
   const calendar = CalendarApp.getCalendarById(calendarId);
   return calendar.getName();
