@@ -59,10 +59,27 @@
               scheduleBtn.innerText = btnInfo.text;
               scheduleBtn.setAttribute("class", "btn");
               scheduleBtn.setAttribute("style", btnInfo.style);
-              scheduleBtn.setAttribute(
-                "onClick",
-                `clickBtn("${btnInfo.page}", "${calendar.id}")`
-              );
+
+              switch (btnInfo.text) {
+                case "スケジュール":
+                  scheduleBtn.setAttribute(
+                    "onClick",
+                    `enterpriseScheduleBtn("${calendar.id}")`
+                  );
+                  break;
+
+                case "編集":
+                  scheduleBtn.setAttribute(
+                    "onClick",
+                    `enterpriseEditBtn("${calendar.id}")`
+                  );
+                  break;
+
+                case "削除":
+                  scheduleBtn.setAttribute("onClick", `enterpriseDeleteBtn()`);
+                  break;
+              }
+
               enterpriseElement.appendChild(scheduleBtn);
             });
 
@@ -74,6 +91,7 @@
 
     function showEnterpriseList() {
       const enterpriseList = document.getElementById("show-enterprises");
+      sessionStorage.removeItem("calendarId");
       enterpriseList.innerHTML = ""; // 初期化
       google.script.run
         .withSuccessHandler((calendarList) => {
@@ -88,10 +106,27 @@
               scheduleBtn.innerText = btnInfo.text;
               scheduleBtn.setAttribute("class", "btn");
               scheduleBtn.setAttribute("style", btnInfo.style);
-              scheduleBtn.setAttribute(
-                "onClick",
-                `clickBtn("${btnInfo.page}", "${calendar.id}")`
-              );
+
+              switch (btnInfo.text) {
+                case "スケジュール":
+                  scheduleBtn.setAttribute(
+                    "onClick",
+                    `enterpriseScheduleBtn("${calendar.id}")`
+                  );
+                  break;
+
+                case "編集":
+                  scheduleBtn.setAttribute(
+                    "onClick",
+                    `enterpriseEditBtn("${calendar.id}")`
+                  );
+                  break;
+
+                case "削除":
+                  scheduleBtn.setAttribute("onClick", `enterpriseDeleteBtn()`);
+                  break;
+              }
+
               enterpriseElement.appendChild(scheduleBtn);
             });
 
@@ -107,10 +142,18 @@
       onChangeScreen("record-enterprise");
     }
 
-    function clickBtn(transisionPage, calendarId) {
+    function enterpriseScheduleBtn(calendarId) {
       sessionStorage.setItem("calendarId", calendarId);
-      showPlanList(); // スケジュールボタンにだけ実装したい
-      onChangeScreen(transisionPage);
+      showPlanList();
+      onChangeScreen("plan-list");
     }
+
+    function enterpriseEditBtn(calendarId) {
+      sessionStorage.setItem("calendarId", calendarId);
+      clearEnterpriseForm();
+      onChangeScreen("record-enterprise");
+    }
+
+    function enterpriseDeleteBtn() {}
   </script>
 </body>

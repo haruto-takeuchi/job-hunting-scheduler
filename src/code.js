@@ -222,3 +222,19 @@ function getSameCalendar(calendarId) {
   const calendar = CalendarApp.getCalendarById(calendarId);
   return calendar.getName();
 }
+
+/**
+ * カレンダーIDと合致するカレンダー情報をアップデートする
+ * @param {string} calendarId
+ * @param {string} name
+ * @param {string} aspiration
+ */
+function updateCalendar(calendarId, name, aspiration) {
+  const calendar = CalendarApp.getCalendarById(calendarId);
+  const description = {
+    createdBy: "就活スケジュール管理",
+    aspiration: `${aspiration}`,
+  };
+
+  calendar.setName(name).setDescription(JSON.stringify(description));
+}
