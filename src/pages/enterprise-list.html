@@ -1,159 +1,176 @@
-<body>
-  <div id="enterprise-list">
-    <header class="title">企業一覧</header>
-    <div style="margin: 1%">
-      <button class="btn" onclick="toEnterpriseRecord()">企業追加</button>
-      <button class="btn" onclick="onChangeScreen('plan-list')">
-        すべての予定
-      </button>
-      <label>志望度</label>
-      <select id="sort-aspiration" onchange="showEnterpriseByAspiration()">
-        <option value="">-</option>
-        <option value="high">高</option>
-        <option value="middle">中</option>
-        <option value="low">低</option>
-      </select>
-    </div>
-    <div id="show-enterprises"></div>
+<div id="enterprise-list">
+  <header class="title">企業一覧</header>
+  <div style="margin: 1%">
+    <button class="btn" onclick="toEnterpriseRecord()">企業追加</button>
+    <button class="btn" onclick="onChangeScreen('plan-list')">
+      すべての予定
+    </button>
+    <label>志望度</label>
+    <select id="sort-aspiration" onchange="showEnterpriseByAspiration()">
+      <option value="">-</option>
+      <option value="high">高</option>
+      <option value="middle">中</option>
+      <option value="low">低</option>
+    </select>
   </div>
+  <div id="show-enterprises"></div>
+</div>
 
-  <script>
-    const btnInfo = [
-      {
-        text: "スケジュール",
-        style: "background-color: yellow",
-        page: "plan-list",
-      },
-      {
-        text: "編集",
-        style: "background-color: green; color: white",
-        page: "record-enterprise",
-      },
-      {
-        text: "削除",
-        style: "background-color: red; color: white",
-        page: "",
-      },
-    ];
+<script>
+  const btnInfo = [
+    {
+      text: "スケジュール",
+      style: "background-color: yellow",
+      page: "plan-list",
+    },
+    {
+      text: "編集",
+      style: "background-color: green; color: white",
+      page: "record-enterprise",
+    },
+    {
+      text: "削除",
+      style: "background-color: red; color: white",
+      page: "",
+    },
+  ];
 
-    function showEnterpriseByAspiration() {
-      const aspiration = document.getElementById("sort-aspiration").value;
-      const enterpriseList = document.getElementById("show-enterprises");
-      enterpriseList.innerHTML = ""; // 初期化
+  function showEnterpriseByAspiration() {
+    const aspiration = document.getElementById("sort-aspiration").value;
+    const enterpriseList = document.getElementById("show-enterprises");
+    enterpriseList.innerHTML = ""; // 初期化
 
-      if (aspiration === "") {
-        showEnterpriseList();
-        return;
-      }
+    if (aspiration === "") {
+      showEnterpriseList();
+      return;
+    }
 
-      google.script.run
-        .withSuccessHandler((calendarList) => {
-          calendarList.map((calendar) => {
-            const enterpriseElement = document.createElement("div");
-            enterpriseElement.setAttribute("style", "margin: 2%");
-            enterpriseElement.innerHTML = calendar.name;
+    google.script.run
+      .withSuccessHandler((calendarList) => {
+        calendarList.map((calendar) => {
+          const enterpriseElement = document.createElement("div");
+          enterpriseElement.setAttribute("style", "margin: 2%");
+          enterpriseElement.innerHTML = calendar.name;
 
-            // スケジュール、編集、削除ボタンを作成
-            btnInfo.map((btnInfo) => {
-              const scheduleBtn = document.createElement("button");
-              scheduleBtn.innerText = btnInfo.text;
-              scheduleBtn.setAttribute("class", "btn");
-              scheduleBtn.setAttribute("style", btnInfo.style);
+          // スケジュール、編集、削除ボタンを作成
+          btnInfo.map((btnInfo) => {
+            const scheduleBtn = document.createElement("button");
+            scheduleBtn.innerText = btnInfo.text;
+            scheduleBtn.setAttribute("class", "btn");
+            scheduleBtn.setAttribute("style", btnInfo.style);
 
-              switch (btnInfo.text) {
-                case "スケジュール":
-                  scheduleBtn.setAttribute(
-                    "onClick",
-                    `enterpriseScheduleBtn("${calendar.id}")`
-                  );
-                  break;
+            switch (btnInfo.text) {
+              case "スケジュール":
+                scheduleBtn.setAttribute(
+                  "onClick",
+                  `enterpriseScheduleBtn("${calendar.id}")`
+                );
+                break;
 
-                case "編集":
-                  scheduleBtn.setAttribute(
-                    "onClick",
-                    `enterpriseEditBtn("${calendar.id}")`
-                  );
-                  break;
+              case "編集":
+                scheduleBtn.setAttribute(
+                  "onClick",
+                  `enterpriseEditBtn("${calendar.id}")`
+                );
+                break;
 
-                case "削除":
-                  scheduleBtn.setAttribute("onClick", `enterpriseDeleteBtn()`);
-                  break;
-              }
+              case "削除":
+                scheduleBtn.setAttribute("onClick", `enterpriseDeleteBtn()`);
+                break;
+            }
 
-              enterpriseElement.appendChild(scheduleBtn);
-            });
-
-            enterpriseList.appendChild(enterpriseElement);
+            enterpriseElement.appendChild(scheduleBtn);
           });
-        })
-        .getCalendarListByAspiration(aspiration);
-    }
 
-    function showEnterpriseList() {
-      const enterpriseList = document.getElementById("show-enterprises");
-      sessionStorage.removeItem("calendarId");
-      enterpriseList.innerHTML = ""; // 初期化
-      google.script.run
-        .withSuccessHandler((calendarList) => {
-          calendarList.map((calendar) => {
-            const enterpriseElement = document.createElement("div");
-            enterpriseElement.setAttribute("style", "margin: 2%");
-            enterpriseElement.innerHTML = calendar.name;
+          enterpriseList.appendChild(enterpriseElement);
+        });
+      })
+      .getCalendarListByAspiration(aspiration);
+  }
 
-            // スケジュール、編集、削除ボタンを作成
-            btnInfo.map((btnInfo) => {
-              const scheduleBtn = document.createElement("button");
-              scheduleBtn.innerText = btnInfo.text;
-              scheduleBtn.setAttribute("class", "btn");
-              scheduleBtn.setAttribute("style", btnInfo.style);
+  function showEnterpriseList() {
+    const enterpriseList = document.getElementById("show-enterprises");
+    sessionStorage.removeItem("calendarId");
+    enterpriseList.innerHTML = ""; // 初期化
+    google.script.run
+      .withSuccessHandler((calendarList) => {
+        calendarList.map((calendar) => {
+          const enterpriseElement = document.createElement("div");
+          enterpriseElement.setAttribute("style", "margin: 2%");
+          enterpriseElement.innerHTML = calendar.name;
 
-              switch (btnInfo.text) {
-                case "スケジュール":
-                  scheduleBtn.setAttribute(
-                    "onClick",
-                    `enterpriseScheduleBtn("${calendar.id}")`
-                  );
-                  break;
+          // スケジュール、編集、削除ボタンを作成
+          btnInfo.map((btnInfo) => {
+            const scheduleBtn = document.createElement("button");
+            scheduleBtn.innerText = btnInfo.text;
+            scheduleBtn.setAttribute("class", "btn");
+            scheduleBtn.setAttribute("style", btnInfo.style);
 
-                case "編集":
-                  scheduleBtn.setAttribute(
-                    "onClick",
-                    `enterpriseEditBtn("${calendar.id}")`
-                  );
-                  break;
+            switch (btnInfo.text) {
+              case "スケジュール":
+                scheduleBtn.setAttribute(
+                  "onClick",
+                  `enterpriseScheduleBtn("${calendar.id}")`
+                );
+                break;
 
-                case "削除":
-                  scheduleBtn.setAttribute("onClick", `enterpriseDeleteBtn()`);
-                  break;
-              }
+              case "編集":
+                scheduleBtn.setAttribute(
+                  "onClick",
+                  `enterpriseEditBtn("${calendar.id}")`
+                );
+                break;
 
-              enterpriseElement.appendChild(scheduleBtn);
-            });
+              case "削除":
+                scheduleBtn.setAttribute(
+                  "onClick",
+                  `enterpriseDeleteBtn("${calendar.id}","${calendar.name}")`
+                );
+                break;
+            }
 
-            enterpriseList.appendChild(enterpriseElement);
+            enterpriseElement.appendChild(scheduleBtn);
           });
+
+          enterpriseList.appendChild(enterpriseElement);
+        });
+      })
+      .getCalendarNameAndIdList();
+  }
+  showEnterpriseList();
+
+  function toEnterpriseRecord() {
+    clearEnterpriseForm();
+    onChangeScreen("record-enterprise");
+  }
+
+  function enterpriseScheduleBtn(calendarId) {
+    sessionStorage.setItem("calendarId", calendarId);
+    showPlanList();
+    onChangeScreen("plan-list");
+  }
+
+  function enterpriseEditBtn(calendarId) {
+    sessionStorage.setItem("calendarId", calendarId);
+    clearEnterpriseForm();
+    onChangeScreen("record-enterprise");
+  }
+
+  /**
+   * 企業カレンダーを削除
+   */
+  function enterpriseDeleteBtn(calendarId, calendarName) {
+    const deleteFlag = confirm(`${calendarName}を削除しますか？`);
+
+    if (deleteFlag) {
+      google.script.run
+        .withSuccessHandler((flag) => {
+          alert(flag ? "削除が完了しました" : "削除に失敗しました");
+          showEnterpriseList();
         })
-        .getCalendarNameAndIdList();
+        .deleteCalendar(calendarId);
+    } else {
+      alert("キャンセルしました");
     }
-    showEnterpriseList();
-
-    function toEnterpriseRecord() {
-      clearEnterpriseForm();
-      onChangeScreen("record-enterprise");
-    }
-
-    function enterpriseScheduleBtn(calendarId) {
-      sessionStorage.setItem("calendarId", calendarId);
-      showPlanList();
-      onChangeScreen("plan-list");
-    }
-
-    function enterpriseEditBtn(calendarId) {
-      sessionStorage.setItem("calendarId", calendarId);
-      clearEnterpriseForm();
-      onChangeScreen("record-enterprise");
-    }
-
-    function enterpriseDeleteBtn() {}
-  </script>
-</body>
+  }
+</script>

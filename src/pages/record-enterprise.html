@@ -67,8 +67,10 @@
     }
 
     google.script.run
-      .withSuccessHandler(() => {
-        alert("企業情報を更新しました");
+      .withSuccessHandler((flag) => {
+        alert(
+          flag ? "企業情報を更新しました" : "既に同名の企業が登録されています"
+        );
       })
       .updateCalendar(calendarId, enterpriseName, enterprisAspiration);
   }
