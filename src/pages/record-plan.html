@@ -54,12 +54,17 @@
     </div>
     <button onclick="submitPlan()" class="btn">登録</button>
     <br />
-    <button onclick="onChangeScreen('plan-list')" class="btn">予定一覧</button>
+    <button onclick="toPlanList()" class="btn">予定一覧</button>
   </div>
 
   <script>
+    /**
+     * 任意のカレンダーに入力フォームの予定を作成する
+     * 必須項目未入力の際は登録不可でアラート表示
+     */
     function submitPlan() {
-      // ToDo:引数でCalendarIDを渡してそのカレンダーに予定を追加したい
+      const calendarId = sessionStorage.getItem("calendarId");
+      // ToDo:入力フォームを初期化したい
       const planInfo = {
         title: document.getElementById("plan-title").value,
         date: document.getElementById("plan-date").value,
@@ -82,25 +87,16 @@
         return;
       }
 
-      // Todo:searchSameNameCalendarは今後sessionStorageからIDを取得するため削除予定
-      const companyName = "ESM";
       google.script.run
-        .withSuccessHandler((calendarId) => {
-          console.log(calendarId);
-          google.script.run
-            .withSuccessHandler(() => {
-              alert("予定の登録が完了しました");
-            })
-            .createEnterpriseEvent(calendarId, planInfo);
+        .withSuccessHandler(() => {
+          alert("予定の登録が完了しました");
         })
-        .searchSameNameCalendar(companyName);
+        .createEnterpriseEvent(calendarId, planInfo);
+    }
 
-      console.log(planInfo.title);
-      console.log(planInfo.date);
-      console.log(planInfo.startTime);
-      console.log(planInfo.endTime);
-      console.log(planInfo.location);
-      console.log(planInfo.memo);
+    function toPlanList() {
+      showPlanList();
+      onChangeScreen("plan-list");
     }
   </script>
 </body>

@@ -98,10 +98,8 @@ function getEnterpriseNameList() {
  * @param {*} planInfo 予定の情報
  */
 function createEnterpriseEvent(calendarId, planInfo) {
+  console.log(planInfo.date);
   const calendar = CalendarApp.getCalendarById(calendarId);
-  console.log(calendar);
-  console.log(typeof planInfo.date);
-  console.log(new Date(`${planInfo.date}, ${planInfo.startTime}`));
   const event = calendar.createEvent(
     planInfo.title,
     new Date(`${planInfo.date}, ${planInfo.startTime}`),
@@ -110,4 +108,99 @@ function createEnterpriseEvent(calendarId, planInfo) {
 
   planInfo.location && event.setLocation(planInfo.location);
   planInfo.memo && event.setDescription(planInfo.memo);
+}
+
+/**
+ *
+ * @returns カレンダー名とカレンダーIDの配列
+ */
+function getCalendarNameAndIdList() {
+  const calendars = getEnterpriseCalendars();
+  const calendarList = [];
+
+  calendars.map((calendar) => {
+    calendarList.push({ name: calendar.getName(), id: calendar.getId() });
+  });
+
+  return calendarList;
+}
+
+/**
+ * nowから２年後までのイベントを取得
+ * @returns ２年後までのイベント
+ */
+function getEnterpriseEvents(calendarId) {
+  // const calendarId = "c_jkea33sq3trghie69m0d4k4668@group.calendar.google.com";
+  const calendar = CalendarApp.getCalendarById(calendarId);
+  const now = new Date();
+  const endTime = new Date();
+  endTime.setFullYear(now.getFullYear() + 2); // 2年後までのイベント取得
+
+  return calendar.getEvents(now, endTime);
+}
+
+/**
+ * Date型の値をstringにフォーマット
+ * @param {Date} date
+ * @param {string} format
+ * @returns stringにフォーマットされたDate
+ */
+function formatDateToString(date, format) {
+  console.log("date:" + date);
+  let year = date.getFullYear();
+  let month = date.getMonth() + 1;
+  let day = date.getDate();
+  let hour = date.getHours();
+  let minute = date.getMinutes();
+
+  // 0埋め
+  month = ("0" + month).slice(-2);
+  day = ("0" + day).slice(-2);
+  hour = ("0" + hour).slice(-2);
+  minute = ("0" + minute).slice(-2);
+
+  switch (format) {
+    case "YYYY-MM-DD":
+      return `${year}-${month}-${day}`;
+
+    case "hh:mm":
+      return `${hour}:${minute}`;
+
+    default:
+      return `${year}-${month}-${day} ${hour}:${minute}`;
+  }
+}
+
+/**
+ * 任意のカレンダーからイベント情報を取得して返す
+ * @param {string} calendarId
+ * @returns イベント情報の配列
+ */
+function getEventList(calendarId) {
+  const events = getEnterpriseEvents(calendarId);
+  const eventsInfo = [];
+
+  events.map((event) => {
+    console.log(event.getStartTime());
+    eventsInfo.push({
+      id: event.getId(),
+      title: event.getTitle(),
+      date: formatDateToString(event.getStartTime(), "YYYY-MM-DD"), //event.getStartTime()
+      startTime: formatDateToString(event.getStartTime(), "hh:mm"),
+      endTime: formatDateToString(event.getEndTime(), "hh:mm"),
+      location: event.getLocation(),
+      memo: event.getDescription(),
+    });
+  });
+  return eventsInfo;
+}
+
+/**
+ * カレンダーIDからカレンダー名を返す
+ * @param {string} calendarId
+ * @returns カレンダー名
+ */
+function getSameCalendar(calendarId) {
+  const calendar = CalendarApp.getCalendarById(calendarId);
+  return calendar.getName();
 }
