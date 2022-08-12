@@ -123,7 +123,10 @@
                   break;
 
                 case "削除":
-                  scheduleBtn.setAttribute("onClick", `enterpriseDeleteBtn()`);
+                  scheduleBtn.setAttribute(
+                    "onClick",
+                    `enterpriseDeleteBtn("${calendar.id}","${calendar.name}")`
+                  );
                   break;
               }
 
@@ -154,6 +157,19 @@
       onChangeScreen("record-enterprise");
     }
 
-    function enterpriseDeleteBtn() {}
+    function enterpriseDeleteBtn(calendarId, calendarName) {
+      const deleteFlag = confirm(`${calendarName}を削除しますか？`);
+
+      if (deleteFlag) {
+        google.script.run
+          .withSuccessHandler((flag) => {
+            alert(flag ? "削除が完了しました" : "削除に失敗しました");
+            showEnterpriseList();
+          })
+          .deleteCalendar(calendarId);
+      } else {
+        alert("キャンセルしました");
+      }
+    }
   </script>
 </body>

@@ -231,10 +231,26 @@ function getSameCalendar(calendarId) {
  */
 function updateCalendar(calendarId, name, aspiration) {
   const calendar = CalendarApp.getCalendarById(calendarId);
+  const sameNameCalendar = searchSameNameCalendar(calendar.getName());
   const description = {
     createdBy: "就活スケジュール管理",
     aspiration: `${aspiration}`,
   };
 
-  calendar.setName(name).setDescription(JSON.stringify(description));
+  if (!sameNameCalendar) {
+    calendar.setName(name).setDescription(JSON.stringify(description));
+    return true;
+  }
+  return false;
+}
+
+function deleteCalendar(calendarId) {
+  try {
+    const calendar = CalendarApp.getCalendarById(calendarId);
+    calendar.deleteCalendar();
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+  return true;
 }
