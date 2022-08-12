@@ -1,69 +1,90 @@
-<body>
-  <div id="record-enterprise" class="no-display">
-    <header class="title">企業情報の登録</header>
-    <div style="margin: 1% 1% 5% 1%; font-size: 120%">
-      <label>企業名</label>
-      <input
-        type="text"
-        id="input-enterprise"
-        placeholder="企業名を入力してください"
-      />
-      <br />
-      <label>志望度</label>
-      <select id="aspiration">
-        <option value="high">高</option>
-        <option value="middle">中</option>
-        <option value="low">低</option>
-      </select>
-    </div>
-    <div>
-      <button
-        onclick="createNewCalendar()"
-        style="font-weight: bold; padding: 0.5% 1%; margin: 1%"
-      >
-        登録
-      </button>
-    </div>
-    <div>
-      <button
-        onclick="toEnterpriseList()"
-        style="font-weight: bold; padding: 0.5% 1%; margin: 1%"
-      >
-        企業一覧
-      </button>
-    </div>
+<div id="record-enterprise" class="no-display">
+  <header class="title">企業情報の登録</header>
+  <div style="margin: 1% 1% 5% 1%; font-size: 120%">
+    <label>企業名</label>
+    <input
+      type="text"
+      id="input-enterprise"
+      placeholder="企業名を入力してください"
+    />
+    <br />
+    <label>志望度</label>
+    <select id="aspiration">
+      <option value="high">高</option>
+      <option value="middle">中</option>
+      <option value="low">低</option>
+    </select>
   </div>
-  <script>
-    function createNewCalendar() {
-      const enterpriseName = document.getElementById("input-enterprise").value;
-      const enterprisAspiration = document.getElementById("aspiration").value;
+  <div>
+    <button
+      id="record-enterprise-btn"
+      style="font-weight: bold; padding: 0.5% 1%; margin: 1%"
+    >
+      登録
+    </button>
+  </div>
+  <div>
+    <button
+      onclick="toEnterpriseList()"
+      style="font-weight: bold; padding: 0.5% 1%; margin: 1%"
+    >
+      企業一覧
+    </button>
+  </div>
+</div>
+<script>
+  function createNewCalendar() {
+    const enterpriseName = document.getElementById("input-enterprise").value;
+    const enterprisAspiration = document.getElementById("aspiration").value;
 
-      if (!enterpriseName) {
-        return alert("企業名が未入力です");
-      }
-
-      google.script.run
-        .withSuccessHandler((flag) => {
-          alert(
-            flag
-              ? "企業の登録が成功しました"
-              : "既に同名の企業が登録されています"
-          );
-          clearEnterpriseForm();
-        })
-        .createEnterpriseCalendar(enterpriseName, enterprisAspiration);
+    if (!enterpriseName) {
+      return alert("企業名が未入力です");
     }
 
-    /**
-     * 企業登録画面の入力フォームの初期化
-     */
-    function clearEnterpriseForm() {
-      document.getElementById("input-enterprise").value = "";
+    google.script.run
+      .withSuccessHandler((flag) => {
+        alert(
+          flag ? "企業の登録が成功しました" : "既に同名の企業が登録されています"
+        );
+        clearEnterpriseForm();
+      })
+      .createEnterpriseCalendar(enterpriseName, enterprisAspiration);
+  }
+
+  function toEnterpriseList() {
+    onChangeScreen("enterprise-list");
+    showEnterpriseList();
+  }
+
+  function updateCalendar() {
+    console.log("updateCalendar click!!");
+    const calendarId = sessionStorage.getItem("calendarId");
+    const enterpriseName = document.getElementById("input-enterprise").value;
+    const enterprisAspiration = document.getElementById("aspiration").value;
+
+    if (!enterpriseName) {
+      return alert("企業名が未入力です");
     }
 
-    function toEnterpriseList() {
-      onChangeScreen("enterprise-list");
-      showEnterpriseList();
+    google.script.run
+      .withSuccessHandler(() => {
+        alert("企業情報を更新しました");
+      })
+      .updateCalendar(calendarId, enterpriseName, enterprisAspiration);
+  }
+
+  /**
+   * 企業登録画面の入力フォームの初期化
+   */
+  function clearEnterpriseForm() {
+    document.getElementById("input-enterprise").value = "";
+    const calendarId = sessionStorage.getItem("calendarId");
+    const recordBtn = document.getElementById("record-enterprise-btn");
+
+    if (calendarId) {
+      recordBtn.setAttribute("onClick", "updateCalendar()");
+    } else {
+      recordBtn.setAttribute("onClick", "createNewCalendar()");
     }
-  </script>
-</body>
+  }
+</script>
