@@ -5,13 +5,14 @@ function doGet() {
 /**
  * 企業カレンダー作成
  * @param {string} enterpriseName 企業名
+ * @param {string} aspiration 志望度
  * @returns カレンダーが作成されたらtrue、されなかったらfalse
  */
-function createEnterpriseCalendar(enterpriseName) {
+function createEnterpriseCalendar(enterpriseName, aspiration) {
   const sameNameCalendar = searchSameNameCalendar(enterpriseName);
   const description = {
     createdBy: "就活スケジュール管理",
-    aspiration: "middle",
+    aspiration: `${aspiration}`,
   };
 
   if (!sameNameCalendar) {
