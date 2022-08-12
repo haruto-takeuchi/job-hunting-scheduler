@@ -1,98 +1,94 @@
-<body>
-  <div id="plan-list" class="no-display">
-    <header class="title">予定一覧</header>
+<div id="plan-list" class="no-display">
+  <header class="title">予定一覧</header>
 
-    <div id="enterprise-name" style="text-align: center"></div>
-    <button class="btn" onclick="toEnterpriseList()">企業一覧</button>
-    <button class="btn" onclick="onChangeScreen('record-plan')">
-      予定作成
-    </button>
-    <div id="show-plans"></div>
-  </div>
+  <div id="enterprise-name" style="text-align: center"></div>
+  <button class="btn" onclick="toEnterpriseList()">企業一覧</button>
+  <button class="btn" onclick="onChangeScreen('record-plan')">予定作成</button>
+  <div id="show-plans"></div>
+</div>
 
-  <script>
-    function showPlanList() {
-      const calendarId = sessionStorage.getItem("calendarId");
-      const enterpriseName = document.getElementById("enterprise-name");
-      const planList = document.getElementById("show-plans");
-      planList.innerHTML = ""; // 初期化
+<script>
+  function showPlanList() {
+    const calendarId = sessionStorage.getItem("calendarId");
+    const enterpriseName = document.getElementById("enterprise-name");
+    const planList = document.getElementById("show-plans");
+    planList.innerHTML = ""; // 初期化
 
-      google.script.run
-        .withSuccessHandler((calendarName) => {
-          enterpriseName.innerText = calendarName;
-        })
-        .getSameCalendar(calendarId);
+    google.script.run
+      .withSuccessHandler((calendarName) => {
+        enterpriseName.innerText = calendarName;
+      })
+      .getSameCalendar(calendarId);
 
-      google.script.run
-        .withSuccessHandler((eventList) => {
-          eventList.map((event) => {
-            const planElement = document.createElement("div");
-            if (judgeWeekAgo(event.date)) {
-              planElement.setAttribute("class", "less-week-plan");
-            } else {
-              planElement.setAttribute("class", "more-week-plan");
-            }
-            const planTitle = document.createElement("div");
-            const planDate = document.createElement("div");
-            const planStart = document.createElement("div");
-            const planEnd = document.createElement("div");
-            const planLocation = document.createElement("div");
-            const planMemo = document.createElement("div");
-            const btnRow = document.createElement("div");
-            const editBtn = document.createElement("button");
-            const deleteBtn = document.createElement("button");
+    google.script.run
+      .withSuccessHandler((eventList) => {
+        eventList.map((event) => {
+          const planElement = document.createElement("div");
+          if (judgeWeekAgo(event.date)) {
+            planElement.setAttribute("class", "less-week-plan");
+          } else {
+            planElement.setAttribute("class", "more-week-plan");
+          }
+          const planTitle = document.createElement("div");
+          const planDate = document.createElement("div");
+          const planStart = document.createElement("div");
+          const planEnd = document.createElement("div");
+          const planLocation = document.createElement("div");
+          const planMemo = document.createElement("div");
+          const btnRow = document.createElement("div");
+          const editBtn = document.createElement("button");
+          const deleteBtn = document.createElement("button");
 
-            planTitle.innerText = `タイトル : ${event.title}`;
-            planDate.innerText = `日付 : ${event.date}`;
-            planStart.innerText = `開始時間 : ${event.startTime}`;
-            planEnd.innerText = `終了時間 : ${event.endTime}`;
-            planLocation.innerText = `場所 : ${event.location}`;
-            planMemo.innerText = `メモ : ${event.memo}`;
+          planTitle.innerText = `タイトル : ${event.title}`;
+          planDate.innerText = `日付 : ${event.date}`;
+          planStart.innerText = `開始時間 : ${event.startTime}`;
+          planEnd.innerText = `終了時間 : ${event.endTime}`;
+          planLocation.innerText = `場所 : ${event.location}`;
+          planMemo.innerText = `メモ : ${event.memo}`;
 
-            btnRow.setAttribute("style", "text-align: right");
-            editBtn.innerText = "編集";
-            editBtn.setAttribute("class", "btn");
-            editBtn.setAttribute(
-              "style",
-              "background-color: green; color: white"
-            );
-            editBtn.setAttribute("onclick", "onChangeScreen('record-plan')");
-            deleteBtn.innerText = "削除";
-            deleteBtn.setAttribute("class", "btn");
-            deleteBtn.setAttribute(
-              "style",
-              "background-color: red; color: white"
-            );
+          btnRow.setAttribute("style", "text-align: right");
+          editBtn.innerText = "編集";
+          editBtn.setAttribute("class", "btn");
+          editBtn.setAttribute(
+            "style",
+            "background-color: green; color: white"
+          );
+          editBtn.setAttribute("onclick", "onChangeScreen('record-plan')");
+          deleteBtn.innerText = "削除";
+          deleteBtn.setAttribute("class", "btn");
+          deleteBtn.setAttribute(
+            "style",
+            "background-color: red; color: white"
+          );
 
-            planElement.appendChild(planTitle);
-            planElement.appendChild(planDate);
-            planElement.appendChild(planStart);
-            planElement.appendChild(planEnd);
-            planElement.appendChild(planLocation);
-            planElement.appendChild(planMemo);
-            planElement.appendChild(editBtn);
-            planElement.appendChild(deleteBtn);
+          planElement.appendChild(planTitle);
+          planElement.appendChild(planDate);
+          planElement.appendChild(planStart);
+          planElement.appendChild(planEnd);
+          planElement.appendChild(planLocation);
+          planElement.appendChild(planMemo);
+          planElement.appendChild(editBtn);
+          planElement.appendChild(deleteBtn);
 
-            btnRow.appendChild(editBtn);
-            btnRow.appendChild(deleteBtn);
-            planElement.appendChild(btnRow);
+          btnRow.appendChild(editBtn);
+          btnRow.appendChild(deleteBtn);
+          planElement.appendChild(btnRow);
 
-            planList.appendChild(planElement);
-          });
-        })
-        .getEventList(calendarId);
-    }
+          planList.appendChild(planElement);
+        });
+      })
+      .getEventList(calendarId);
+  }
 
-    /**
-     * 予定まで１週間切っているか判定
-     * return １週間切っていたらtrue
-     */
-    function judgeWeekAgo(date) {
-      const today = new Date();
-      const eventDay = new Date(date);
-      eventDay.setDate(eventDay.getDate() - 7);
+  /**
+   * 予定まで１週間切っているか判定
+   * return １週間切っていたらtrue
+   */
+  function judgeWeekAgo(date) {
+    const today = new Date();
+    const eventDay = new Date(date);
+    eventDay.setDate(eventDay.getDate() - 7);
 
-      return today >= eventDay;
-    }
-  </script>
-</body>
+    return today >= eventDay;
+  }
+</script>
