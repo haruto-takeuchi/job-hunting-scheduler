@@ -54,10 +54,14 @@
     </div>
     <button onclick="submitPlan()" class="btn">登録</button>
     <br />
-    <button onclick="onChangeScreen('plan-list')" class="btn">予定一覧</button>
+    <button onclick="toPlanList()" class="btn">予定一覧</button>
   </div>
 
   <script>
+    /**
+     * 任意のカレンダーに入力フォームの予定を作成する
+     * 必須項目未入力の際は登録不可でアラート表示
+     */
     function submitPlan() {
       const calendarId = sessionStorage.getItem("calendarId");
       // ToDo:入力フォームを初期化したい
@@ -88,6 +92,11 @@
           alert("予定の登録が完了しました");
         })
         .createEnterpriseEvent(calendarId, planInfo);
+    }
+
+    function toPlanList() {
+      showPlanList();
+      onChangeScreen("plan-list");
     }
   </script>
 </body>
