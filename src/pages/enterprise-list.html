@@ -6,30 +6,73 @@
       <button class="btn" onclick="onChangeScreen('plan-list')">
         すべての予定
       </button>
+      <label>志望度</label>
+      <select id="sort-aspiration" onchange="showEnterpriseByAspiration()">
+        <option value="">-</option>
+        <option value="high">高</option>
+        <option value="middle">中</option>
+        <option value="low">低</option>
+      </select>
     </div>
     <div id="show-enterprises"></div>
   </div>
 
   <script>
-    function showEnterpriseList() {
-      const btnInfo = [
-        {
-          text: "スケジュール",
-          style: "background-color: yellow",
-          page: "plan-list",
-        },
-        {
-          text: "編集",
-          style: "background-color: green; color: white",
-          page: "record-enterprise",
-        },
-        {
-          text: "削除",
-          style: "background-color: red; color: white",
-          page: "",
-        },
-      ];
+    const btnInfo = [
+      {
+        text: "スケジュール",
+        style: "background-color: yellow",
+        page: "plan-list",
+      },
+      {
+        text: "編集",
+        style: "background-color: green; color: white",
+        page: "record-enterprise",
+      },
+      {
+        text: "削除",
+        style: "background-color: red; color: white",
+        page: "",
+      },
+    ];
 
+    function showEnterpriseByAspiration() {
+      const aspiration = document.getElementById("sort-aspiration").value;
+      const enterpriseList = document.getElementById("show-enterprises");
+      enterpriseList.innerHTML = ""; // 初期化
+
+      if (aspiration === "") {
+        showEnterpriseList();
+        return;
+      }
+
+      google.script.run
+        .withSuccessHandler((calendarList) => {
+          calendarList.map((calendar) => {
+            const enterpriseElement = document.createElement("div");
+            enterpriseElement.setAttribute("style", "margin: 2%");
+            enterpriseElement.innerHTML = calendar.name;
+
+            // スケジュール、編集、削除ボタンを作成
+            btnInfo.map((btnInfo) => {
+              const scheduleBtn = document.createElement("button");
+              scheduleBtn.innerText = btnInfo.text;
+              scheduleBtn.setAttribute("class", "btn");
+              scheduleBtn.setAttribute("style", btnInfo.style);
+              scheduleBtn.setAttribute(
+                "onClick",
+                `clickBtn("${btnInfo.page}", "${calendar.id}")`
+              );
+              enterpriseElement.appendChild(scheduleBtn);
+            });
+
+            enterpriseList.appendChild(enterpriseElement);
+          });
+        })
+        .getCalendarListByAspiration(aspiration);
+    }
+
+    function showEnterpriseList() {
       const enterpriseList = document.getElementById("show-enterprises");
       enterpriseList.innerHTML = ""; // 初期化
       google.script.run

@@ -125,13 +125,30 @@ function getCalendarNameAndIdList() {
 
   return calendarList;
 }
+/**
+ *
+ * @returns カレンダー名とカレンダーIDの配列
+ */
+function getCalendarListByAspiration(aspiration) {
+  const calendars = getEnterpriseCalendars();
+  const calendarList = [];
+
+  calendars.map((calendar) => {
+    const calendarDescription = calendar.getDescription();
+    const description = JSON.parse(calendarDescription);
+    if (description.aspiration === aspiration) {
+      calendarList.push({ name: calendar.getName(), id: calendar.getId() });
+    }
+  });
+
+  return calendarList;
+}
 
 /**
  * nowから２年後までのイベントを取得
  * @returns ２年後までのイベント
  */
 function getEnterpriseEvents(calendarId) {
-  // const calendarId = "c_jkea33sq3trghie69m0d4k4668@group.calendar.google.com";
   const calendar = CalendarApp.getCalendarById(calendarId);
   const now = new Date();
   const endTime = new Date();
