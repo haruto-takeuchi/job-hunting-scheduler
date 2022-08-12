@@ -2,9 +2,7 @@
   <div id="enterprise-list">
     <header class="title">企業一覧</header>
     <div style="margin: 1%">
-      <button class="btn" onclick="onChangeScreen('record-enterprise')">
-        企業追加
-      </button>
+      <button class="btn" onclick="toEnterpriseRecord()">企業追加</button>
       <button class="btn" onclick="onChangeScreen('plan-list')">
         すべての予定
       </button>
@@ -60,6 +58,11 @@
         .getCalendarNameAndIdList();
     }
     showEnterpriseList();
+
+    function toEnterpriseRecord() {
+      clearEnterpriseForm();
+      onChangeScreen("record-enterprise");
+    }
 
     function clickBtn(transisionPage, calendarId) {
       sessionStorage.setItem("calendarId", calendarId);

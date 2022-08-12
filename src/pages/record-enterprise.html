@@ -34,15 +34,23 @@
         alert("企業名が未入力です");
       } else {
         google.script.run
-          .withSuccessHandler((data) => {
+          .withSuccessHandler((flag) => {
             alert(
-              data
+              flag
                 ? "企業の登録が成功しました"
                 : "既に同名の企業が登録されています"
             );
+            clearEnterpriseForm();
           })
           .createEnterpriseCalendar(enterpriseName);
       }
+    }
+
+    /**
+     * 企業登録画面の入力フォームの初期化
+     */
+    function clearEnterpriseForm() {
+      document.getElementById("input-enterprise").value = "";
     }
 
     function toEnterpriseList() {

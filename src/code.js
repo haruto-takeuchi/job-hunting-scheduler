@@ -65,7 +65,7 @@ function judgeEnterpriseCalendar(calendar) {
 /**
  * 同名のカレンダーを取得し返す
  * @param {string} enterpriseName
- * @returns 同名のカレンダーのID（ない場合はundefined）
+ * @returns 同名のカレンダーのID（ない場合はnull）
  */
 function searchSameNameCalendar(enterpriseName) {
   const enterpriseCalendars = getEnterpriseCalendars();
@@ -74,7 +74,7 @@ function searchSameNameCalendar(enterpriseName) {
     return calendar.getName() == enterpriseName;
   });
 
-  return sameNameCalendar.getId();
+  return sameNameCalendar !== undefined ? sameNameCalendar.getId() : null;
 }
 
 /**
