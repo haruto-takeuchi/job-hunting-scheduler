@@ -2,12 +2,19 @@
   <div id="record-enterprise" class="no-display">
     <header class="title">企業情報の登録</header>
     <div style="margin: 1% 1% 5% 1%; font-size: 120%">
-      企業名
+      <label>企業名</label>
       <input
         type="text"
         id="input-enterprise"
         placeholder="企業名を入力してください"
       />
+      <br />
+      <label>志望度</label>
+      <select id="aspiration">
+        <option value="high">高</option>
+        <option value="middle">中</option>
+        <option value="low">低</option>
+      </select>
     </div>
     <div>
       <button
@@ -29,21 +36,22 @@
   <script>
     function createNewCalendar() {
       const enterpriseName = document.getElementById("input-enterprise").value;
+      const enterprisAspiration = document.getElementById("aspiration").value;
 
       if (!enterpriseName) {
-        alert("企業名が未入力です");
-      } else {
-        google.script.run
-          .withSuccessHandler((flag) => {
-            alert(
-              flag
-                ? "企業の登録が成功しました"
-                : "既に同名の企業が登録されています"
-            );
-            clearEnterpriseForm();
-          })
-          .createEnterpriseCalendar(enterpriseName);
+        return alert("企業名が未入力です");
       }
+
+      google.script.run
+        .withSuccessHandler((flag) => {
+          alert(
+            flag
+              ? "企業の登録が成功しました"
+              : "既に同名の企業が登録されています"
+          );
+          clearEnterpriseForm();
+        })
+        .createEnterpriseCalendar(enterpriseName, enterprisAspiration);
     }
 
     /**
