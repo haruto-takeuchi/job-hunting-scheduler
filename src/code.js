@@ -99,7 +99,6 @@ function getEnterpriseNameList() {
  * @param {*} planInfo 予定の情報
  */
 function createEnterpriseEvent(calendarId, planInfo) {
-  console.log(planInfo.date);
   const calendar = CalendarApp.getCalendarById(calendarId);
   const event = calendar.createEvent(
     planInfo.title,
@@ -164,7 +163,6 @@ function getEnterpriseEvents(calendarId) {
  * @returns stringにフォーマットされたDate
  */
 function formatDateToString(date, format) {
-  console.log("date:" + date);
   let year = date.getFullYear();
   let month = date.getMonth() + 1;
   let day = date.getDate();
@@ -199,11 +197,10 @@ function getEventList(calendarId) {
   const eventsInfo = [];
 
   events.map((event) => {
-    console.log(event.getStartTime());
     eventsInfo.push({
       id: event.getId(),
       title: event.getTitle(),
-      date: formatDateToString(event.getStartTime(), "YYYY-MM-DD"), //event.getStartTime()
+      date: formatDateToString(event.getStartTime(), "YYYY-MM-DD"),
       startTime: formatDateToString(event.getStartTime(), "hh:mm"),
       endTime: formatDateToString(event.getEndTime(), "hh:mm"),
       location: event.getLocation(),
@@ -244,6 +241,11 @@ function updateCalendar(calendarId, name, aspiration) {
   return false;
 }
 
+/**
+ * 任意の企業カレンダーを削除する
+ * @param {string} calendarId
+ * @returns カレンダー削除ができたらTrue
+ */
 function deleteCalendar(calendarId) {
   try {
     const calendar = CalendarApp.getCalendarById(calendarId);
@@ -253,4 +255,22 @@ function deleteCalendar(calendarId) {
     return false;
   }
   return true;
+}
+
+/**
+ * 任意のイベントを更新する
+ * @param {string} calendarId
+ * @param {string} eventId
+ * @param {string} planInfo
+ */
+function updateEnterpriseEvent(calendarId, eventId, planInfo) {
+  const calendar = CalendarApp.getCalendarById(calendarId);
+  const event = calendar.getEventById(eventId);
+  const startTime = new Date(`${planInfo.date}, ${planInfo.startTime}`);
+  const endTime = new Date(`${planInfo.date}, ${planInfo.endTime}`);
+
+  event.setTitle(planInfo.title);
+  event.setTime(startTime, endTime);
+  event.setLocation(planInfo.location);
+  event.setDescription(planInfo.memo);
 }

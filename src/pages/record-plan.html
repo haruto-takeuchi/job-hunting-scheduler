@@ -1,5 +1,10 @@
 <div id="record-plan" class="no-display">
-  <header class="title">予定の登録</header>
+  <div class="record-schedule">
+    <header class="title">予定の登録</header>
+  </div>
+  <div class="update-schedule">
+    <header class="title">予定の編集</header>
+  </div>
   <div>
     <div class="plan-form">
       <label>タイトル</label>
@@ -47,8 +52,12 @@
       ></textarea>
     </div>
   </div>
-  <button onclick="submitPlan()" class="btn">登録</button>
-  <br />
+  <div class="record-schedule">
+    <button onclick="submitPlan()" class="btn">登録</button>
+  </div>
+  <div class="update-schedule">
+    <button onclick="submitPlan()" class="btn">更新</button>
+  </div>
   <button onclick="toPlanList()" class="btn">予定一覧</button>
 </div>
 
@@ -59,7 +68,7 @@
    */
   function submitPlan() {
     const calendarId = sessionStorage.getItem("calendarId");
-    // ToDo:入力フォームを初期化したい
+    const eventId = sessionStorage.getItem("eventId");
     const planInfo = {
       title: document.getElementById("plan-title").value,
       date: document.getElementById("plan-date").value,
@@ -82,15 +91,87 @@
       return;
     }
 
-    google.script.run
-      .withSuccessHandler(() => {
-        alert("予定の登録が完了しました");
-      })
-      .createEnterpriseEvent(calendarId, planInfo);
+    if (eventId) {
+      google.script.run
+        .withSuccessHandler(() => {
+          alert("予定の更新が完了しました");
+        })
+        .updateEnterpriseEvent(calendarId, eventId, planInfo);
+    } else {
+      google.script.run
+        .withSuccessHandler(() => {
+          alert("予定の登録が完了しました");
+          cleanPlanForm();
+        })
+        .createEnterpriseEvent(calendarId, planInfo);
+    }
   }
 
+  /**
+   * 予定一覧画面への遷移
+   */
   function toPlanList() {
     showPlanList();
     onChangeScreen("plan-list");
+  }
+
+  /**
+   * 予定登録フォームの初期化
+   */
+  function cleanPlanForm() {
+    document.getElementById("plan-title").value = "";
+    document.getElementById("plan-date").value = "";
+    document.getElementById("plan-start-time").value = "";
+    document.getElementById("plan-end-time").value = "";
+    document.getElementById("plan-location").value = "";
+    document.getElementById("plan-memo").value = "";
+  }
+
+  /**
+   * 予定登録画面と更新画面の切り替え
+   */
+  function showRecordPlan() {
+    const recordSchedules = Array.from(
+      document.getElementsByClassName("record-schedule")
+    );
+    const updateSchedules = Array.from(
+      document.getElementsByClassName("update-schedule")
+    );
+    const calendarId = sessionStorage.getItem("calendarId");
+    const eventId = sessionStorage.getItem("eventId");
+
+    if (eventId) {
+      recordSchedules.map((recordSchedule) => {
+        recordSchedule.classList.add("no-display");
+      });
+
+      updateSchedules.map((updateSchedule) => {
+        updateSchedule.classList.remove("no-display");
+      });
+
+      // 入力フォームの初期表示
+      google.script.run
+        .withSuccessHandler((eventList) => {
+          const targetEvent = eventList.find((event) => {
+            return event.id === eventId;
+          });
+          document.getElementById("plan-title").value = targetEvent.title;
+          document.getElementById("plan-date").value = targetEvent.date;
+          document.getElementById("plan-start-time").value =
+            targetEvent.startTime;
+          document.getElementById("plan-end-time").value = targetEvent.endTime;
+          document.getElementById("plan-location").value = targetEvent.location;
+          document.getElementById("plan-memo").value = targetEvent.memo;
+        })
+        .getEventList(calendarId);
+    } else {
+      recordSchedules.map((recordSchedule) => {
+        recordSchedule.classList.remove("no-display");
+      });
+
+      updateSchedules.map((updateSchedule) => {
+        updateSchedule.classList.add("no-display");
+      });
+    }
   }
 </script>
