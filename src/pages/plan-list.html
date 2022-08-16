@@ -95,11 +95,13 @@
 
   function editPlanBtn(eventId) {
     sessionStorage.setItem("eventId", eventId);
+    cleanPlanForm();
     showRecordPlan();
     onChangeScreen("record-plan");
   }
 
   function toRecordPlan() {
+    cleanPlanForm();
     showRecordPlan();
     onChangeScreen("record-plan");
   }

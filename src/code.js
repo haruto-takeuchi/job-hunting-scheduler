@@ -244,6 +244,11 @@ function updateCalendar(calendarId, name, aspiration) {
   return false;
 }
 
+/**
+ * 任意の企業カレンダーを削除する
+ * @param {string} calendarId
+ * @returns カレンダー削除ができたらTrue
+ */
 function deleteCalendar(calendarId) {
   try {
     const calendar = CalendarApp.getCalendarById(calendarId);
@@ -253,4 +258,22 @@ function deleteCalendar(calendarId) {
     return false;
   }
   return true;
+}
+
+/**
+ * 任意のイベントを更新する
+ * @param {string} calendarId
+ * @param {string} eventId
+ * @param {string} planInfo
+ */
+function updateEnterpriseEvent(calendarId, eventId, planInfo) {
+  const calendar = CalendarApp.getCalendarById(calendarId);
+  const event = calendar.getEventById(eventId);
+  const startTime = new Date(`${planInfo.date}, ${planInfo.startTime}`);
+  const endTime = new Date(`${planInfo.date}, ${planInfo.endTime}`);
+
+  event.setTitle(planInfo.title);
+  event.setTime(startTime, endTime);
+  event.setLocation(planInfo.location);
+  event.setDescription(planInfo.memo);
 }

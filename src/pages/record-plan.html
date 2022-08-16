@@ -68,6 +68,7 @@
    */
   function submitPlan() {
     const calendarId = sessionStorage.getItem("calendarId");
+    const eventId = sessionStorage.getItem("eventId");
     const planInfo = {
       title: document.getElementById("plan-title").value,
       date: document.getElementById("plan-date").value,
@@ -90,12 +91,20 @@
       return;
     }
 
-    google.script.run
-      .withSuccessHandler(() => {
-        alert("予定の登録が完了しました");
-        cleanPlanForm();
-      })
-      .createEnterpriseEvent(calendarId, planInfo);
+    if (eventId) {
+      google.script.run
+        .withSuccessHandler(() => {
+          alert("予定の更新が完了しました");
+        })
+        .updateEnterpriseEvent(calendarId, eventId, planInfo);
+    } else {
+      google.script.run
+        .withSuccessHandler(() => {
+          alert("予定の登録が完了しました");
+          cleanPlanForm();
+        })
+        .createEnterpriseEvent(calendarId, planInfo);
+    }
   }
 
   /**
@@ -128,6 +137,7 @@
     const updateSchedules = Array.from(
       document.getElementsByClassName("update-schedule")
     );
+    const calendarId = sessionStorage.getItem("calendarId");
     const eventId = sessionStorage.getItem("eventId");
 
     if (eventId) {
@@ -138,6 +148,23 @@
       updateSchedules.map((updateSchedule) => {
         updateSchedule.classList.remove("no-display");
       });
+
+      // 入力フォームの初期表示
+      google.script.run
+        .withSuccessHandler((eventList) => {
+          const targetEvent = eventList.find((event) => {
+            return event.id === eventId;
+          });
+          console.log(targetEvent);
+          document.getElementById("plan-title").value = targetEvent.title;
+          document.getElementById("plan-date").value = targetEvent.date;
+          document.getElementById("plan-start-time").value =
+            targetEvent.startTime;
+          document.getElementById("plan-end-time").value = targetEvent.endTime;
+          document.getElementById("plan-location").value = targetEvent.location;
+          document.getElementById("plan-memo").value = targetEvent.memo;
+        })
+        .getEventList(calendarId);
     } else {
       recordSchedules.map((recordSchedule) => {
         recordSchedule.classList.remove("no-display");
