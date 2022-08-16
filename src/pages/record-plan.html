@@ -1,5 +1,10 @@
 <div id="record-plan" class="no-display">
-  <header class="title">予定の登録</header>
+  <div class="record-schedule">
+    <header class="title">予定の登録</header>
+  </div>
+  <div class="update-schedule">
+    <header class="title">予定の編集</header>
+  </div>
   <div>
     <div class="plan-form">
       <label>タイトル</label>
@@ -85,12 +90,28 @@
     google.script.run
       .withSuccessHandler(() => {
         alert("予定の登録が完了しました");
+        cleanPlanForm();
       })
       .createEnterpriseEvent(calendarId, planInfo);
   }
 
+  /**
+   * 予定一覧画面への遷移
+   */
   function toPlanList() {
     showPlanList();
     onChangeScreen("plan-list");
+  }
+
+  /**
+   * 予定登録フォームの初期化
+   */
+  function cleanPlanForm() {
+    document.getElementById("plan-title").value = "";
+    document.getElementById("plan-date").value = "";
+    document.getElementById("plan-start-time").value = "";
+    document.getElementById("plan-end-time").value = "";
+    document.getElementById("plan-location").value = "";
+    document.getElementById("plan-memo").value = "";
   }
 </script>
