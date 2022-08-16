@@ -3,7 +3,7 @@
 
   <div id="enterprise-name" style="text-align: center"></div>
   <button class="btn" onclick="toEnterpriseList()">企業一覧</button>
-  <button class="btn" onclick="onChangeScreen('record-plan')">予定作成</button>
+  <button class="btn" onclick="toRecordPlan()">予定作成</button>
   <div id="show-plans"></div>
 </div>
 
@@ -13,6 +13,7 @@
     const enterpriseName = document.getElementById("enterprise-name");
     const planList = document.getElementById("show-plans");
     planList.innerHTML = ""; // 初期化
+    sessionStorage.removeItem("eventId");
 
     google.script.run
       .withSuccessHandler((calendarName) => {
@@ -53,7 +54,7 @@
             "style",
             "background-color: green; color: white"
           );
-          editBtn.setAttribute("onclick", "onChangeScreen('record-plan')");
+          editBtn.setAttribute("onclick", `editPlanBtn("${event.id}")`);
           deleteBtn.innerText = "削除";
           deleteBtn.setAttribute("class", "btn");
           deleteBtn.setAttribute(
@@ -90,5 +91,16 @@
     eventDay.setDate(eventDay.getDate() - 7);
 
     return today >= eventDay;
+  }
+
+  function editPlanBtn(eventId) {
+    sessionStorage.setItem("eventId", eventId);
+    showRecordPlan();
+    onChangeScreen("record-plan");
+  }
+
+  function toRecordPlan() {
+    showRecordPlan();
+    onChangeScreen("record-plan");
   }
 </script>

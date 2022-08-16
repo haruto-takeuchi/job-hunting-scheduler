@@ -203,7 +203,7 @@ function getEventList(calendarId) {
     eventsInfo.push({
       id: event.getId(),
       title: event.getTitle(),
-      date: formatDateToString(event.getStartTime(), "YYYY-MM-DD"), //event.getStartTime()
+      date: formatDateToString(event.getStartTime(), "YYYY-MM-DD"),
       startTime: formatDateToString(event.getStartTime(), "hh:mm"),
       endTime: formatDateToString(event.getEndTime(), "hh:mm"),
       location: event.getLocation(),

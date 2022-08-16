@@ -52,8 +52,12 @@
       ></textarea>
     </div>
   </div>
-  <button onclick="submitPlan()" class="btn">登録</button>
-  <br />
+  <div class="record-schedule">
+    <button onclick="submitPlan()" class="btn">登録</button>
+  </div>
+  <div class="update-schedule">
+    <button onclick="submitPlan()" class="btn">更新</button>
+  </div>
   <button onclick="toPlanList()" class="btn">予定一覧</button>
 </div>
 
@@ -64,7 +68,6 @@
    */
   function submitPlan() {
     const calendarId = sessionStorage.getItem("calendarId");
-    // ToDo:入力フォームを初期化したい
     const planInfo = {
       title: document.getElementById("plan-title").value,
       date: document.getElementById("plan-date").value,
@@ -113,5 +116,36 @@
     document.getElementById("plan-end-time").value = "";
     document.getElementById("plan-location").value = "";
     document.getElementById("plan-memo").value = "";
+  }
+
+  /**
+   * 予定登録画面と更新画面の切り替え
+   */
+  function showRecordPlan() {
+    const recordSchedules = Array.from(
+      document.getElementsByClassName("record-schedule")
+    );
+    const updateSchedules = Array.from(
+      document.getElementsByClassName("update-schedule")
+    );
+    const eventId = sessionStorage.getItem("eventId");
+
+    if (eventId) {
+      recordSchedules.map((recordSchedule) => {
+        recordSchedule.classList.add("no-display");
+      });
+
+      updateSchedules.map((updateSchedule) => {
+        updateSchedule.classList.remove("no-display");
+      });
+    } else {
+      recordSchedules.map((recordSchedule) => {
+        recordSchedule.classList.remove("no-display");
+      });
+
+      updateSchedules.map((updateSchedule) => {
+        updateSchedule.classList.add("no-display");
+      });
+    }
   }
 </script>
