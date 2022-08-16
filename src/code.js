@@ -250,11 +250,11 @@ function deleteCalendar(calendarId) {
   try {
     const calendar = CalendarApp.getCalendarById(calendarId);
     calendar.deleteCalendar();
+    return true;
   } catch (error) {
     console.error(error);
     return false;
   }
-  return true;
 }
 
 /**
@@ -273,4 +273,21 @@ function updateEnterpriseEvent(calendarId, eventId, planInfo) {
   event.setTime(startTime, endTime);
   event.setLocation(planInfo.location);
   event.setDescription(planInfo.memo);
+}
+
+/**
+ * 任意のイベントの削除
+ * @param {string} calendarId
+ * @param {string} eventId
+ */
+function deleteEnterpriseEvent(calendarId, eventId) {
+  try {
+    const calendar = CalendarApp.getCalendarById(calendarId);
+    const event = calendar.getEventById(eventId);
+    event.deleteEvent();
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
 }

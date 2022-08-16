@@ -61,6 +61,10 @@
             "style",
             "background-color: red; color: white"
           );
+          deleteBtn.setAttribute(
+            "onclick",
+            `deletePlanBtn("${event.id}", "${event.title}")`
+          );
 
           planElement.appendChild(planTitle);
           planElement.appendChild(planDate);
@@ -98,6 +102,25 @@
     cleanPlanForm();
     showRecordPlan();
     onChangeScreen("record-plan");
+  }
+
+  /**
+   * 予定の削除ボタンの実行関数
+   */
+  function deletePlanBtn(eventId, eventTitle) {
+    const deleteFlag = confirm(`${eventTitle}の予定を削除しますか？`);
+    const calendarId = sessionStorage.getItem("calendarId");
+
+    if (deleteFlag) {
+      google.script.run
+        .withSuccessHandler((flag) => {
+          alert(flag ? "予定を削除しました" : "削除に失敗しました");
+          showPlanList();
+        })
+        .deleteEnterpriseEvent(calendarId, eventId);
+    } else {
+      alert("キャンセルしました");
+    }
   }
 
   function toRecordPlan() {
