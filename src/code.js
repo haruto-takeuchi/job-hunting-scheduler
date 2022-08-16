@@ -99,7 +99,6 @@ function getEnterpriseNameList() {
  * @param {*} planInfo 予定の情報
  */
 function createEnterpriseEvent(calendarId, planInfo) {
-  console.log(planInfo.date);
   const calendar = CalendarApp.getCalendarById(calendarId);
   const event = calendar.createEvent(
     planInfo.title,
@@ -164,7 +163,6 @@ function getEnterpriseEvents(calendarId) {
  * @returns stringにフォーマットされたDate
  */
 function formatDateToString(date, format) {
-  console.log("date:" + date);
   let year = date.getFullYear();
   let month = date.getMonth() + 1;
   let day = date.getDate();
@@ -199,7 +197,6 @@ function getEventList(calendarId) {
   const eventsInfo = [];
 
   events.map((event) => {
-    console.log(event.getStartTime());
     eventsInfo.push({
       id: event.getId(),
       title: event.getTitle(),
