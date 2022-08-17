@@ -102,8 +102,8 @@ function createEnterpriseEvent(calendarId, planInfo) {
   const calendar = CalendarApp.getCalendarById(calendarId);
   const event = calendar.createEvent(
     planInfo.title,
-    new Date(`${planInfo.date}, ${planInfo.startTime}`),
-    new Date(`${planInfo.date}, ${planInfo.endTime}`)
+    new Date(`${planInfo.date}  ${planInfo.startTime}`),
+    new Date(`${planInfo.date}  ${planInfo.endTime}`)
   );
 
   planInfo.location && event.setLocation(planInfo.location);
@@ -266,8 +266,8 @@ function deleteCalendar(calendarId) {
 function updateEnterpriseEvent(calendarId, eventId, planInfo) {
   const calendar = CalendarApp.getCalendarById(calendarId);
   const event = calendar.getEventById(eventId);
-  const startTime = new Date(`${planInfo.date}, ${planInfo.startTime}`);
-  const endTime = new Date(`${planInfo.date}, ${planInfo.endTime}`);
+  const startTime = new Date(`${planInfo.date} ${planInfo.startTime}`);
+  const endTime = new Date(`${planInfo.date} ${planInfo.endTime}`);
 
   event.setTitle(planInfo.title);
   event.setTime(startTime, endTime);
@@ -304,6 +304,7 @@ function getAllEventList() {
     const events = getEnterpriseEvents(calendar.getId());
     events.map((event) => {
       eventList.push({
+        calendarId: calendar.getId(),
         calendarName: calendar.getName(),
         id: event.getId(),
         title: event.getTitle(),
@@ -314,6 +315,20 @@ function getAllEventList() {
         memo: event.getDescription(),
       });
     });
+  });
+
+  // 直近のイベントが始めに来るようにソート
+  eventList.sort((first, next) => {
+    const firstDate = `${first.date} ${first.startTime}`;
+    const nextDate = `${next.date} ${next.startTime}`;
+
+    if (firstDate > nextDate) {
+      return 1;
+    } else if (firstDate < nextDate) {
+      return -1;
+    } else {
+      return 0;
+    }
   });
 
   return eventList;

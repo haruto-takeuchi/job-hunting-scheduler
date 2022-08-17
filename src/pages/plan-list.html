@@ -10,6 +10,9 @@
 </div>
 
 <script>
+  /**
+   * 予定の表示
+   */
   function showPlanList() {
     const calendarId = sessionStorage.getItem("calendarId");
     const enterpriseName = document.getElementById("enterprise-name");
@@ -31,6 +34,9 @@
       .getEventList(calendarId);
   }
 
+  /**
+   * 全ての予定の表示
+   */
   function showAllPlanList() {
     document.getElementById("enterprise-name").innerText = "すべての予定";
     document
@@ -52,6 +58,9 @@
     const planList = document.getElementById("show-plans");
 
     eventList.map((event) => {
+      const calendarId =
+        sessionStorage.getItem("calendarId") || event.calendarId;
+      console.log(calendarId);
       const planElement = document.createElement("div");
       if (judgeWeekAgo(event.date)) {
         planElement.setAttribute("class", "less-week-plan");
@@ -86,13 +95,16 @@
       editBtn.innerText = "編集";
       editBtn.setAttribute("class", "btn");
       editBtn.setAttribute("style", "background-color: green; color: white");
-      editBtn.setAttribute("onclick", `editPlanBtn("${event.id}")`);
+      editBtn.setAttribute(
+        "onclick",
+        `editPlanBtn("${calendarId}", "${event.id}")`
+      );
       deleteBtn.innerText = "削除";
       deleteBtn.setAttribute("class", "btn");
       deleteBtn.setAttribute("style", "background-color: red; color: white");
       deleteBtn.setAttribute(
         "onclick",
-        `deletePlanBtn("${event.id}", "${event.title}")`
+        `deletePlanBtn("${calendarId}" ,"${event.id}", "${event.title}")`
       );
 
       planElement.appendChild(planTitle);
@@ -124,19 +136,22 @@
     return today >= eventDay;
   }
 
-  function editPlanBtn(eventId) {
+  /**
+   * 予定の編集ボタンの実行関数
+   */
+  function editPlanBtn(calendarId, eventId) {
     sessionStorage.setItem("eventId", eventId);
     cleanPlanForm();
-    showRecordPlan();
+    showRecordPlan(calendarId);
     onChangeScreen("record-plan");
   }
 
   /**
    * 予定の削除ボタンの実行関数
    */
-  function deletePlanBtn(eventId, eventTitle) {
+  function deletePlanBtn(calendarId, eventId, eventTitle) {
     const deleteFlag = confirm(`${eventTitle}の予定を削除しますか？`);
-    const calendarId = sessionStorage.getItem("calendarId");
+    // const calendarId = sessionStorage.getItem("calendarId");
 
     if (deleteFlag) {
       google.script.run
