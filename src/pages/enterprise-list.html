@@ -141,7 +141,25 @@
       })
       .getCalendarNameAndIdList();
   }
-  showEnterpriseList();
+  showEnterpriseList(); // 企業一覧画面の初期表示
+
+  /**
+   * 企業カレンダーを削除
+   */
+  function enterpriseDeleteBtn(calendarId, calendarName) {
+    const deleteFlag = confirm(`${calendarName}を削除しますか？`);
+
+    if (deleteFlag) {
+      google.script.run
+        .withSuccessHandler((flag) => {
+          alert(flag ? "削除が完了しました" : "削除に失敗しました");
+          showEnterpriseList();
+        })
+        .deleteCalendar(calendarId);
+    } else {
+      alert("キャンセルしました");
+    }
+  }
 
   /**
    * 企業追加ボタンの実行関数
@@ -170,24 +188,6 @@
     sessionStorage.setItem("calendarId", calendarId);
     clearEnterpriseForm();
     onChangeScreen("record-enterprise");
-  }
-
-  /**
-   * 企業カレンダーを削除
-   */
-  function enterpriseDeleteBtn(calendarId, calendarName) {
-    const deleteFlag = confirm(`${calendarName}を削除しますか？`);
-
-    if (deleteFlag) {
-      google.script.run
-        .withSuccessHandler((flag) => {
-          alert(flag ? "削除が完了しました" : "削除に失敗しました");
-          showEnterpriseList();
-        })
-        .deleteCalendar(calendarId);
-    } else {
-      alert("キャンセルしました");
-    }
   }
 
   /**
