@@ -3,7 +3,9 @@
 
   <div id="enterprise-name" style="text-align: center"></div>
   <button class="btn" onclick="toEnterpriseList()">企業一覧</button>
-  <button class="btn" onclick="toRecordPlan()">予定作成</button>
+  <button id="create-plan-btn" class="btn" onclick="toRecordPlan()">
+    予定作成
+  </button>
   <div id="show-plans"></div>
 </div>
 
@@ -11,8 +13,9 @@
   function showPlanList() {
     const calendarId = sessionStorage.getItem("calendarId");
     const enterpriseName = document.getElementById("enterprise-name");
-    const planList = document.getElementById("show-plans");
-    planList.innerHTML = ""; // 初期化
+    document.getElementById("create-plan-btn").classList.remove("no-display");
+    document.getElementById("create-plan-btn").setAttribute("class", "btn");
+    document.getElementById("show-plans").innerHTML = ""; // 初期化
     sessionStorage.removeItem("eventId");
 
     google.script.run
@@ -23,66 +26,90 @@
 
     google.script.run
       .withSuccessHandler((eventList) => {
-        eventList.map((event) => {
-          const planElement = document.createElement("div");
-          if (judgeWeekAgo(event.date)) {
-            planElement.setAttribute("class", "less-week-plan");
-          } else {
-            planElement.setAttribute("class", "more-week-plan");
-          }
-          const planTitle = document.createElement("div");
-          const planDate = document.createElement("div");
-          const planStart = document.createElement("div");
-          const planEnd = document.createElement("div");
-          const planLocation = document.createElement("div");
-          const planMemo = document.createElement("div");
-          const btnRow = document.createElement("div");
-          const editBtn = document.createElement("button");
-          const deleteBtn = document.createElement("button");
-
-          planTitle.innerText = `タイトル : ${event.title}`;
-          planDate.innerText = `日付 : ${event.date}`;
-          planStart.innerText = `開始時間 : ${event.startTime}`;
-          planEnd.innerText = `終了時間 : ${event.endTime}`;
-          planLocation.innerText = `場所 : ${event.location}`;
-          planMemo.innerText = `メモ : ${event.memo}`;
-
-          btnRow.setAttribute("style", "text-align: right");
-          editBtn.innerText = "編集";
-          editBtn.setAttribute("class", "btn");
-          editBtn.setAttribute(
-            "style",
-            "background-color: green; color: white"
-          );
-          editBtn.setAttribute("onclick", `editPlanBtn("${event.id}")`);
-          deleteBtn.innerText = "削除";
-          deleteBtn.setAttribute("class", "btn");
-          deleteBtn.setAttribute(
-            "style",
-            "background-color: red; color: white"
-          );
-          deleteBtn.setAttribute(
-            "onclick",
-            `deletePlanBtn("${event.id}", "${event.title}")`
-          );
-
-          planElement.appendChild(planTitle);
-          planElement.appendChild(planDate);
-          planElement.appendChild(planStart);
-          planElement.appendChild(planEnd);
-          planElement.appendChild(planLocation);
-          planElement.appendChild(planMemo);
-          planElement.appendChild(editBtn);
-          planElement.appendChild(deleteBtn);
-
-          btnRow.appendChild(editBtn);
-          btnRow.appendChild(deleteBtn);
-          planElement.appendChild(btnRow);
-
-          planList.appendChild(planElement);
-        });
+        displayPlanList(eventList, false);
       })
       .getEventList(calendarId);
+  }
+
+  function showAllPlanList() {
+    document.getElementById("enterprise-name").innerText = "すべての予定";
+    document
+      .getElementById("create-plan-btn")
+      .setAttribute("class", "no-display");
+    document.getElementById("show-plans").innerHTML = ""; // 初期化
+
+    google.script.run
+      .withSuccessHandler((eventList) => {
+        displayPlanList(eventList, true);
+      })
+      .getAllEventList();
+  }
+
+  /**
+   * イベントの描画処理
+   */
+  function displayPlanList(eventList, showAllFlag) {
+    const planList = document.getElementById("show-plans");
+
+    eventList.map((event) => {
+      const planElement = document.createElement("div");
+      if (judgeWeekAgo(event.date)) {
+        planElement.setAttribute("class", "less-week-plan");
+      } else {
+        planElement.setAttribute("class", "more-week-plan");
+      }
+
+      if (showAllFlag) {
+        const enterpriseName = document.createElement("div");
+        enterpriseName.innerText = `会社名 : ${event.calendarName}`;
+        planElement.appendChild(enterpriseName);
+      }
+
+      const planTitle = document.createElement("div");
+      const planDate = document.createElement("div");
+      const planStart = document.createElement("div");
+      const planEnd = document.createElement("div");
+      const planLocation = document.createElement("div");
+      const planMemo = document.createElement("div");
+      const btnRow = document.createElement("div");
+      const editBtn = document.createElement("button");
+      const deleteBtn = document.createElement("button");
+
+      planTitle.innerText = `タイトル : ${event.title}`;
+      planDate.innerText = `日付 : ${event.date}`;
+      planStart.innerText = `開始時間 : ${event.startTime}`;
+      planEnd.innerText = `終了時間 : ${event.endTime}`;
+      planLocation.innerText = `場所 : ${event.location}`;
+      planMemo.innerText = `メモ : ${event.memo}`;
+
+      btnRow.setAttribute("style", "text-align: right");
+      editBtn.innerText = "編集";
+      editBtn.setAttribute("class", "btn");
+      editBtn.setAttribute("style", "background-color: green; color: white");
+      editBtn.setAttribute("onclick", `editPlanBtn("${event.id}")`);
+      deleteBtn.innerText = "削除";
+      deleteBtn.setAttribute("class", "btn");
+      deleteBtn.setAttribute("style", "background-color: red; color: white");
+      deleteBtn.setAttribute(
+        "onclick",
+        `deletePlanBtn("${event.id}", "${event.title}")`
+      );
+
+      planElement.appendChild(planTitle);
+      planElement.appendChild(planDate);
+      planElement.appendChild(planStart);
+      planElement.appendChild(planEnd);
+      planElement.appendChild(planLocation);
+      planElement.appendChild(planMemo);
+      planElement.appendChild(editBtn);
+      planElement.appendChild(deleteBtn);
+
+      btnRow.appendChild(editBtn);
+      btnRow.appendChild(deleteBtn);
+      planElement.appendChild(btnRow);
+
+      planList.appendChild(planElement);
+    });
   }
 
   /**

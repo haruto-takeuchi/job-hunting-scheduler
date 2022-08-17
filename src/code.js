@@ -291,3 +291,30 @@ function deleteEnterpriseEvent(calendarId, eventId) {
     return false;
   }
 }
+
+/**
+ * 企業カレンダーの全てのイベントを取得
+ * @returns 企業カレンダーの全イベント
+ */
+function getAllEventList() {
+  const calendarList = getEnterpriseCalendars();
+  const eventList = [];
+
+  calendarList.map((calendar) => {
+    const events = getEnterpriseEvents(calendar.getId());
+    events.map((event) => {
+      eventList.push({
+        calendarName: calendar.getName(),
+        id: event.getId(),
+        title: event.getTitle(),
+        date: formatDateToString(event.getStartTime(), "YYYY-MM-DD"),
+        startTime: formatDateToString(event.getStartTime(), "hh:mm"),
+        endTime: formatDateToString(event.getEndTime(), "hh:mm"),
+        location: event.getLocation(),
+        memo: event.getDescription(),
+      });
+    });
+  });
+
+  return eventList;
+}
