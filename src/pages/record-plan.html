@@ -111,7 +111,8 @@
    * 予定一覧画面への遷移
    */
   function toPlanList() {
-    showPlanList();
+    const calendarId = sessionStorage.getItem("calendarId");
+    calendarId ? showPlanList() : showAllPlanList();
     onChangeScreen("plan-list");
   }
 
@@ -130,14 +131,14 @@
   /**
    * 予定登録画面と更新画面の切り替え
    */
-  function showRecordPlan() {
+  function showRecordPlan(calendarId) {
     const recordSchedules = Array.from(
       document.getElementsByClassName("record-schedule")
     );
     const updateSchedules = Array.from(
       document.getElementsByClassName("update-schedule")
     );
-    const calendarId = sessionStorage.getItem("calendarId");
+    // const calendarId = sessionStorage.getItem("calendarId");
     const eventId = sessionStorage.getItem("eventId");
 
     if (eventId) {

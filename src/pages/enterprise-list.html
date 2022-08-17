@@ -2,9 +2,7 @@
   <header class="title">企業一覧</header>
   <div style="margin: 1%">
     <button class="btn" onclick="toEnterpriseRecord()">企業追加</button>
-    <button class="btn" onclick="onChangeScreen('plan-list')">
-      すべての予定
-    </button>
+    <button class="btn" onclick="allPlansBtn()">すべての予定</button>
     <label>志望度</label>
     <select id="sort-aspiration" onchange="showEnterpriseByAspiration()">
       <option value="">-</option>
@@ -172,5 +170,10 @@
     } else {
       alert("キャンセルしました");
     }
+  }
+
+  function allPlansBtn() {
+    showAllPlanList();
+    onChangeScreen("plan-list");
   }
 </script>
