@@ -51,6 +51,9 @@
     <?!= HtmlService.createHtmlOutputFromFile('src/pages/record-plan').getContent(); ?>
   </body>
   <script>
+    /**
+     * 画面遷移を行う
+     */
     function onChangeScreen(screenName) {
       const enterpriseList = document.getElementById("enterprise-list");
       const planList = document.getElementById("plan-list");

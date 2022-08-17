@@ -33,6 +33,9 @@
     },
   ];
 
+  /**
+   * 志望度ごとに企業を一覧表示
+   */
   function showEnterpriseByAspiration() {
     const aspiration = document.getElementById("sort-aspiration").value;
     const enterpriseList = document.getElementById("show-enterprises");
@@ -86,6 +89,9 @@
       .getCalendarListByAspiration(aspiration);
   }
 
+  /**
+   * 企業を一覧表示
+   */
   function showEnterpriseList() {
     const enterpriseList = document.getElementById("show-enterprises");
     sessionStorage.removeItem("calendarId");
@@ -137,17 +143,29 @@
   }
   showEnterpriseList();
 
+  /**
+   * 企業追加ボタンの実行関数
+   * 企業登録フォームを初期化し、企業登録画面に遷移する
+   */
   function toEnterpriseRecord() {
     clearEnterpriseForm();
     onChangeScreen("record-enterprise");
   }
 
+  /**
+   * 企業のスケジュールボタンの実行関数
+   * 企業の予定一覧画面を表示し、遷移
+   */
   function enterpriseScheduleBtn(calendarId) {
     sessionStorage.setItem("calendarId", calendarId);
     showPlanList();
     onChangeScreen("plan-list");
   }
 
+  /**
+   * 企業の編集ボタンの実行関数
+   * 企業登録フォームを初期化し、企業登録画面に遷移する
+   */
   function enterpriseEditBtn(calendarId) {
     sessionStorage.setItem("calendarId", calendarId);
     clearEnterpriseForm();
@@ -172,6 +190,9 @@
     }
   }
 
+  /**
+   * 全ての予定ボタンの実行関数
+   */
   function allPlansBtn() {
     showAllPlanList();
     onChangeScreen("plan-list");
