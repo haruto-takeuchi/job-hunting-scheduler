@@ -1,5 +1,10 @@
 <div id="record-enterprise" class="no-display">
-  <header class="title">企業情報の登録</header>
+  <div class="record-company">
+    <header class="title">企業情報の登録</header>
+  </div>
+  <div class="edit-company">
+    <header class="title">企業情報の編集</header>
+  </div>
   <div style="margin: 1% 1% 5% 1%; font-size: 120%">
     <label>企業名</label>
     <input
@@ -15,12 +20,20 @@
       <option value="low">低</option>
     </select>
   </div>
-  <div>
+  <div class="record-company">
     <button
-      id="record-enterprise-btn"
       style="font-weight: bold; padding: 0.5% 1%; margin: 1%"
+      onclick="createNewCalendar()"
     >
       登録
+    </button>
+  </div>
+  <div class="edit-company">
+    <button
+      style="font-weight: bold; padding: 0.5% 1%; margin: 1%"
+      onclick="updateCalendar()"
+    >
+      更新
     </button>
   </div>
   <div>
@@ -84,12 +97,27 @@
   function clearEnterpriseForm() {
     document.getElementById("input-enterprise").value = "";
     const calendarId = sessionStorage.getItem("calendarId");
-    const recordBtn = document.getElementById("record-enterprise-btn");
+    const recordCalendars = Array.from(
+      document.getElementsByClassName("record-company")
+    );
+    const editCalendars = Array.from(
+      document.getElementsByClassName("edit-company")
+    );
 
     if (calendarId) {
-      recordBtn.setAttribute("onClick", "updateCalendar()");
+      recordCalendars.map((recordCalendar) => {
+        recordCalendar.classList.add("no-display");
+      });
+      editCalendars.map((editCalendar) => {
+        editCalendar.classList.remove("no-display");
+      });
     } else {
-      recordBtn.setAttribute("onClick", "createNewCalendar()");
+      recordCalendars.map((recordCalendar) => {
+        recordCalendar.classList.remove("no-display");
+      });
+      editCalendars.map((editCalendar) => {
+        editCalendar.classList.add("no-display");
+      });
     }
   }
 
