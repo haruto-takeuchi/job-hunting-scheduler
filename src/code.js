@@ -125,6 +125,11 @@ function getCalendarListByAspiration(aspiration) {
   return calendarList;
 }
 
+function getCalendarDescription(calendarId) {
+  const calendar = CalendarApp.getCalendarById(calendarId);
+  return calendar.getDescription();
+}
+
 /**
  * カレンダーIDからカレンダー名を返す
  * @param {string} calendarId
@@ -141,16 +146,16 @@ function getSameCalendar(calendarId) {
  * @param {string} name
  * @param {string} aspiration
  */
-function updateCalendar(calendarId, name, aspiration) {
+function updateCalendar(calendarId, calendarName, aspiration) {
   const calendar = CalendarApp.getCalendarById(calendarId);
-  const sameNameCalendar = searchSameNameCalendar(calendar.getName());
+  const sameNameCalendar = searchSameNameCalendar(calendarName);
   const description = {
     createdBy: "就活スケジュール管理",
     aspiration: `${aspiration}`,
   };
 
   if (!sameNameCalendar) {
-    calendar.setName(name).setDescription(JSON.stringify(description));
+    calendar.setName(calendarName).setDescription(JSON.stringify(description));
     return true;
   }
   return false;
