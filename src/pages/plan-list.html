@@ -60,7 +60,6 @@
     eventList.map((event) => {
       const calendarId =
         sessionStorage.getItem("calendarId") || event.calendarId;
-      console.log(calendarId);
       const planElement = document.createElement("div");
       if (judgeWeekAgo(event.date)) {
         planElement.setAttribute("class", "less-week-plan");

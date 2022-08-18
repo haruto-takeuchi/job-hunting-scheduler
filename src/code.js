@@ -20,7 +20,6 @@ function createEnterpriseCalendar(enterpriseName, aspiration) {
     calendar.setDescription(JSON.stringify(description));
     return true;
   }
-
   return false;
 }
 
@@ -39,7 +38,6 @@ function getEnterpriseCalendars() {
       enterpriseCalendars.push(judgedCalendar);
     }
   });
-
   return enterpriseCalendars;
 }
 
@@ -94,24 +92,7 @@ function getEnterpriseNameList() {
 }
 
 /**
- * 任意の企業カレンダーに予定を作成
- * @param {*} calendarId 企業カレンダーのID
- * @param {*} planInfo 予定の情報
- */
-function createEnterpriseEvent(calendarId, planInfo) {
-  const calendar = CalendarApp.getCalendarById(calendarId);
-  const event = calendar.createEvent(
-    planInfo.title,
-    new Date(`${planInfo.date}  ${planInfo.startTime}`),
-    new Date(`${planInfo.date}  ${planInfo.endTime}`)
-  );
-
-  planInfo.location && event.setLocation(planInfo.location);
-  planInfo.memo && event.setDescription(planInfo.memo);
-}
-
-/**
- *
+ * カレンダーの名前とIDを取得
  * @returns カレンダー名とカレンダーIDの配列
  */
 function getCalendarNameAndIdList() {
@@ -124,8 +105,9 @@ function getCalendarNameAndIdList() {
 
   return calendarList;
 }
+
 /**
- *
+ * 引数の志望度と合致するカレンダーを返す
  * @returns カレンダー名とカレンダーIDの配列
  */
 function getCalendarListByAspiration(aspiration) {
@@ -141,73 +123,6 @@ function getCalendarListByAspiration(aspiration) {
   });
 
   return calendarList;
-}
-
-/**
- * nowから２年後までのイベントを取得
- * @returns ２年後までのイベント
- */
-function getEnterpriseEvents(calendarId) {
-  const calendar = CalendarApp.getCalendarById(calendarId);
-  const now = new Date();
-  const endTime = new Date();
-  endTime.setFullYear(now.getFullYear() + 2); // 2年後までのイベント取得
-
-  return calendar.getEvents(now, endTime);
-}
-
-/**
- * Date型の値をstringにフォーマット
- * @param {Date} date
- * @param {string} format
- * @returns stringにフォーマットされたDate
- */
-function formatDateToString(date, format) {
-  let year = date.getFullYear();
-  let month = date.getMonth() + 1;
-  let day = date.getDate();
-  let hour = date.getHours();
-  let minute = date.getMinutes();
-
-  // 0埋め
-  month = ("0" + month).slice(-2);
-  day = ("0" + day).slice(-2);
-  hour = ("0" + hour).slice(-2);
-  minute = ("0" + minute).slice(-2);
-
-  switch (format) {
-    case "YYYY-MM-DD":
-      return `${year}-${month}-${day}`;
-
-    case "hh:mm":
-      return `${hour}:${minute}`;
-
-    default:
-      return `${year}-${month}-${day} ${hour}:${minute}`;
-  }
-}
-
-/**
- * 任意のカレンダーからイベント情報を取得して返す
- * @param {string} calendarId
- * @returns イベント情報の配列
- */
-function getEventList(calendarId) {
-  const events = getEnterpriseEvents(calendarId);
-  const eventsInfo = [];
-
-  events.map((event) => {
-    eventsInfo.push({
-      id: event.getId(),
-      title: event.getTitle(),
-      date: formatDateToString(event.getStartTime(), "YYYY-MM-DD"),
-      startTime: formatDateToString(event.getStartTime(), "hh:mm"),
-      endTime: formatDateToString(event.getEndTime(), "hh:mm"),
-      location: event.getLocation(),
-      memo: event.getDescription(),
-    });
-  });
-  return eventsInfo;
 }
 
 /**
@@ -258,38 +173,56 @@ function deleteCalendar(calendarId) {
 }
 
 /**
- * 任意のイベントを更新する
- * @param {string} calendarId
- * @param {string} eventId
- * @param {string} planInfo
+ * 任意の企業カレンダーにイベントを作成
+ * @param {*} calendarId 企業カレンダーのID
+ * @param {*} planInfo 予定の情報
  */
-function updateEnterpriseEvent(calendarId, eventId, planInfo) {
+function createEnterpriseEvent(calendarId, planInfo) {
   const calendar = CalendarApp.getCalendarById(calendarId);
-  const event = calendar.getEventById(eventId);
-  const startTime = new Date(`${planInfo.date} ${planInfo.startTime}`);
-  const endTime = new Date(`${planInfo.date} ${planInfo.endTime}`);
+  const event = calendar.createEvent(
+    planInfo.title,
+    new Date(`${planInfo.date}  ${planInfo.startTime}`),
+    new Date(`${planInfo.date}  ${planInfo.endTime}`)
+  );
 
-  event.setTitle(planInfo.title);
-  event.setTime(startTime, endTime);
-  event.setLocation(planInfo.location);
-  event.setDescription(planInfo.memo);
+  planInfo.location && event.setLocation(planInfo.location);
+  planInfo.memo && event.setDescription(planInfo.memo);
 }
 
 /**
- * 任意のイベントの削除
- * @param {string} calendarId
- * @param {string} eventId
+ * nowから２年後までのイベントを取得
+ * @returns ２年後までのイベント
  */
-function deleteEnterpriseEvent(calendarId, eventId) {
-  try {
-    const calendar = CalendarApp.getCalendarById(calendarId);
-    const event = calendar.getEventById(eventId);
-    event.deleteEvent();
-    return true;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
+function getEnterpriseEvents(calendarId) {
+  const calendar = CalendarApp.getCalendarById(calendarId);
+  const now = new Date();
+  const endTime = new Date();
+  endTime.setFullYear(now.getFullYear() + 2); // 2年後までのイベント取得
+
+  return calendar.getEvents(now, endTime);
+}
+
+/**
+ * 任意のカレンダーからイベント情報を取得して返す
+ * @param {string} calendarId
+ * @returns イベント情報の配列
+ */
+function getEventList(calendarId) {
+  const events = getEnterpriseEvents(calendarId);
+  const eventsInfo = [];
+
+  events.map((event) => {
+    eventsInfo.push({
+      id: event.getId(),
+      title: event.getTitle(),
+      date: formatDateToString(event.getStartTime(), "YYYY-MM-DD"),
+      startTime: formatDateToString(event.getStartTime(), "hh:mm"),
+      endTime: formatDateToString(event.getEndTime(), "hh:mm"),
+      location: event.getLocation(),
+      memo: event.getDescription(),
+    });
+  });
+  return eventsInfo;
 }
 
 /**
@@ -330,6 +263,71 @@ function getAllEventList() {
       return 0;
     }
   });
-
   return eventList;
+}
+
+/**
+ * 任意のイベントを更新する
+ * @param {string} calendarId
+ * @param {string} eventId
+ * @param {string} planInfo
+ */
+function updateEnterpriseEvent(calendarId, eventId, planInfo) {
+  const calendar = CalendarApp.getCalendarById(calendarId);
+  const event = calendar.getEventById(eventId);
+  const startTime = new Date(`${planInfo.date} ${planInfo.startTime}`);
+  const endTime = new Date(`${planInfo.date} ${planInfo.endTime}`);
+
+  event.setTitle(planInfo.title);
+  event.setTime(startTime, endTime);
+  event.setLocation(planInfo.location);
+  event.setDescription(planInfo.memo);
+}
+
+/**
+ * 任意のイベントの削除
+ * @param {string} calendarId
+ * @param {string} eventId
+ */
+function deleteEnterpriseEvent(calendarId, eventId) {
+  try {
+    const calendar = CalendarApp.getCalendarById(calendarId);
+    const event = calendar.getEventById(eventId);
+    event.deleteEvent();
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
+
+/**
+ * Date型の値をstringにフォーマット
+ * @param {Date} date
+ * @param {string} format
+ * @returns stringにフォーマットされたDate
+ */
+function formatDateToString(date, format) {
+  let year = date.getFullYear();
+  let month = date.getMonth() + 1;
+  let day = date.getDate();
+  let hour = date.getHours();
+  let minute = date.getMinutes();
+
+  // 0埋め
+  month = ("0" + month).slice(-2);
+  day = ("0" + day).slice(-2);
+  hour = ("0" + hour).slice(-2);
+  minute = ("0" + minute).slice(-2);
+
+  switch (format) {
+    case "YYYY-MM-DD":
+      return `${year}-${month}-${day}`;
+
+    case "hh:mm":
+      return `${hour}:${minute}`;
+
+    default:
+      return `${year}-${month}-${day} ${hour}:${minute}`;
+  }
 }

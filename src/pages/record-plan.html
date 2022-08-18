@@ -63,7 +63,7 @@
 
 <script>
   /**
-   * 任意のカレンダーに入力フォームの予定を作成する
+   * 任意のカレンダーに入力された値の予定を作成する
    * 必須項目未入力の際は登録不可でアラート表示
    */
   function submitPlan() {
@@ -108,15 +108,6 @@
   }
 
   /**
-   * 予定一覧画面への遷移
-   */
-  function toPlanList() {
-    const calendarId = sessionStorage.getItem("calendarId");
-    calendarId ? showPlanList() : showAllPlanList();
-    onChangeScreen("plan-list");
-  }
-
-  /**
    * 予定登録フォームの初期化
    */
   function cleanPlanForm() {
@@ -138,7 +129,6 @@
     const updateSchedules = Array.from(
       document.getElementsByClassName("update-schedule")
     );
-    // const calendarId = sessionStorage.getItem("calendarId");
     const eventId = sessionStorage.getItem("eventId");
 
     if (eventId) {
@@ -174,5 +164,17 @@
         updateSchedule.classList.add("no-display");
       });
     }
+  }
+
+  /**
+   * 予定一覧ボタンの実行関数
+   * カレンダーIDがsessionStorageにある際はそのカレンダーの予定を一覧表示
+   * カレンダーIDがない場合は予定を一覧表示
+   * 予定一覧画面への遷移
+   */
+  function toPlanList() {
+    const calendarId = sessionStorage.getItem("calendarId");
+    calendarId ? showPlanList() : showAllPlanList();
+    onChangeScreen("plan-list");
   }
 </script>

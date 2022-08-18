@@ -33,6 +33,11 @@
   </div>
 </div>
 <script>
+  /**
+   * 新規企業カレンダーの作成
+   * 企業名の未入力時にはアラート表示
+   * カレンダー作成後に入力フォームを初期化
+   */
   function createNewCalendar() {
     const enterpriseName = document.getElementById("input-enterprise").value;
     const enterprisAspiration = document.getElementById("aspiration").value;
@@ -51,11 +56,10 @@
       .createEnterpriseCalendar(enterpriseName, enterprisAspiration);
   }
 
-  function toEnterpriseList() {
-    onChangeScreen("enterprise-list");
-    showEnterpriseList();
-  }
-
+  /**
+   * 企業カレンダーの情報をアップデート
+   * 企業名未入力時はアラート
+   */
   function updateCalendar() {
     const calendarId = sessionStorage.getItem("calendarId");
     const enterpriseName = document.getElementById("input-enterprise").value;
@@ -87,5 +91,14 @@
     } else {
       recordBtn.setAttribute("onClick", "createNewCalendar()");
     }
+  }
+
+  /**
+   * 企業一覧ボタンの実行関数
+   * 企業一覧画面を表示し、遷移
+   */
+  function toEnterpriseList() {
+    showEnterpriseList();
+    onChangeScreen("enterprise-list");
   }
 </script>
