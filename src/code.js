@@ -125,6 +125,11 @@ function getCalendarListByAspiration(aspiration) {
   return calendarList;
 }
 
+function getCalendarDescription(calendarId) {
+  const calendar = CalendarApp.getCalendarById(calendarId);
+  return calendar.getDescription();
+}
+
 /**
  * カレンダーIDからカレンダー名を返す
  * @param {string} calendarId

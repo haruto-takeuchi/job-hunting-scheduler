@@ -95,7 +95,8 @@
    * 企業登録画面の入力フォームの初期化
    */
   function clearEnterpriseForm() {
-    document.getElementById("input-enterprise").value = "";
+    const inputEnterprise = document.getElementById("input-enterprise");
+    const inputAspiration = document.getElementById("aspiration");
     const calendarId = sessionStorage.getItem("calendarId");
     const recordCalendars = Array.from(
       document.getElementsByClassName("record-company")
@@ -104,14 +105,31 @@
       document.getElementsByClassName("edit-company")
     );
 
+    inputEnterprise.value = "";
+
     if (calendarId) {
+      // 企業情報編集画面の表示
       recordCalendars.map((recordCalendar) => {
         recordCalendar.classList.add("no-display");
       });
       editCalendars.map((editCalendar) => {
         editCalendar.classList.remove("no-display");
       });
+
+      google.script.run
+        .withSuccessHandler((calendarName) => {
+          inputEnterprise.value = calendarName;
+        })
+        .getSameCalendar(calendarId);
+
+      google.script.run
+        .withSuccessHandler((calendarDescription) => {
+          const description = JSON.parse(calendarDescription);
+          inputAspiration.value = description.aspiration;
+        })
+        .getCalendarDescription(calendarId);
     } else {
+      // 企業情報登録画面の表示
       recordCalendars.map((recordCalendar) => {
         recordCalendar.classList.remove("no-display");
       });
